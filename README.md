@@ -1,6 +1,7 @@
 # TopChartJS
 
 General Charting Library for plotting statistical data.
+Provides customizeable user configurations for enhanced usability in terms of user interaction and user experience.
 
 [![License][license-badge]][license-badge-url] 
  
