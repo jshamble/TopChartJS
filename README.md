@@ -1,10 +1,41 @@
-# D3StatisticsDemo
-Statistical Charting of Protein Data Bank Data using the D3 library.
+# TopChartJS
+
+General Charting Library for plotting statistical data.
+
+[![License][license-badge]][license-badge-url] 
+ 
+[license-badge]: https://img.shields.io/aur/license/yaourt.svg
+[devDependencies-badge]: https://img.shields.io/david/dev/mrdoob/three.js.svg
+[license-badge-url]: ./LICENSE
+[![Dependencies][dependencies-badge]][dependencies-badge-url]
+
+[dependencies-badge]: https://img.shields.io/david/mrdoob/three.js.svg
+[dependencies-badge-url]: https://david-dm.org/mrdoob/three.js
+[devDependencies-badge]: https://img.shields.io/david/dev/mrdoob/three.js.svg
+[devDependencies-badge-url]: https://david-dm.org/mrdoob/three.js#info=devDependencies
+
+## Usage
+
+Modify the configuration JSON file located in JSON/config.json with the target html id or class nodes in the DOM.
+Then specify the parameters specifically for each target.
+
+The config.json file will be populated with a sample subset of all of the features.
+The complete List of features per chart and their function will be listed below
+
+## Features
 
 ## Goals
 
-  1. Get a front end template going with the d3 library. HTML, CSS, and JS file + the D3.js
-  DONE//2. subdivide the graph into an NxN (dynamically) grid using flexbox. N = 3 will be used for the purposes of this demonstration; the goal is to show different kinds of charts side-by-side
-  3. Use statistics data from RCSB PDB ( rscb.org/stats ). The aim is to use a basic pie and bar chart to parse and display the data, but other more interesting options can be explored.
-  
-  
+Different Chart types:
+
+### Pie
+
+![alt text](https://github.com/rcsb/TopChartJS/blob/master/img/Pie.png)
+
+### Bar (Horizontal)
+
+![alt text](https://github.com/rcsb/TopChartJS/blob/master/img/Horizontal%20Bar.png)
+
+### Bar (Vertical)
+
+![alt text](https://github.com/rcsb/TopChartJS/blob/master/img/Vertical%20Bar.png)
