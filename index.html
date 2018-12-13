@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+	<title>Bar and Pie Chart D3 Demo</title>
+		
+	<meta name="author" content="Jonathan Shamblen" />
+
+	<link rel="stylesheet" href="./css/common.css"/>
+	
+</head>
+
+<body>
+
+
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/d3.min.js"></script>
+	<script src="./js/d3pie.min.js"></script>
+	<script src="./js/common.js"></script>
+	
+	
+	<div class="boxContentContainer">
+		<div class="gridContainer">
+			<svg id="chartContainer" viewBox='0 0 750 500'/>
+			<div id="pieChartDataColumn"></div>
+		</div>
+		
+	<select onchange="onChartChange()" class="chart_button_select" id="chart_select" >
+							<!--populated dynamically on window load-->
+	</select>
+		
+	</div>
+	
+	<div id="mouseHoverChartButton" class="mouseHoverChart">MouseHoverPlaceholder</div>
+	
+	
+	
+</body>
+
+</html>

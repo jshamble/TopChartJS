@@ -1,0 +1,133 @@
+
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+@import url('https://fonts.googleapis.com/css?family=Monda');
+
+html, body {
+    height:100%;
+    flex-direction: row;
+    display: flex;
+	flex-basis: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.gridContainer
+{
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   flex-basis: 100%;
+}
+
+.row {
+   flex-direction: row;
+   display: flex;
+   align-items: stretch;
+   justify-content: center;
+}
+
+/*start bar chart vertical*/
+
+#chartContainer {
+  width: 55em;
+  height: 55em;
+  margin: auto;
+  background-color: #FFFFFF;
+}
+
+svg
+{
+	font-family: 'Roboto', sans-serif;
+}
+
+
+/*.bar {
+  fill: #80cbc4;
+}*/
+
+path {
+  stroke: gray;
+}
+
+line {
+  stroke: gray;
+}
+
+line#limit {
+  stroke: #FED966;
+  stroke-width: 3;
+  stroke-dasharray: 3 6;
+}
+
+
+
+.mouseHoverChart {
+    background-color: black; 
+    color: white; 
+    border: 2px solid black;
+	font-size: 20px;
+	font-family: 'Monda', sans-serif;
+	border-radius: 25px;
+	position: absolute;
+    padding: 0px 10px;
+	opacity: 0;
+	transition: opacity, background 0.25s 0.25s ease;
+	-webkit-transition: opacity 0.25s, background 0.25s ease;
+}
+
+
+.PieChart {
+    background-color: black; 
+    color: white; 
+    border: 2px solid black;
+	font-size: 1em;
+	text-align: center;
+	font-family: 'Monda', sans-serif;
+	border-radius: 25px;
+	position: relative;
+    padding: 0px 10px;
+	opacity: 0;
+	transition: opacity, background 0.25s 0.25s ease;
+	-webkit-transition: opacity 0.25s, background 0.25s ease;
+}
+ 
+
+
+#chart_select{	
+	font-size: 18px;
+	font-family: 'Dosis', sans-serif;
+    font-weight: bold;	
+    background-color: white; 
+    color: black; 
+    border: 2px solid black;
+	font-size: 1em;
+	text-align: center;
+	font-family: 'Monda', sans-serif;
+	border-radius: 25px;
+	position: relative;
+    padding: 0px 10px;
+	opacity: 100;
+	transition: opacity, background 0.25s 0.25s ease;
+	-webkit-transition: opacity 0.25s, background 0.25s ease;
+}
+
+
+
+
+
+/*end bar chart vertical*/
+
+/*for bar chart horizontal, jsut rotate the axis 90 degrees*/
+
+/*
+#barChartVertical
+{	
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}*/
