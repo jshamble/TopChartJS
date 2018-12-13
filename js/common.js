@@ -1,5 +1,9 @@
 'use strict';
 
+var params =
+{
+	textSize : 1.5
+};
 
 function getFileOrDirectoryFromServer(url, doneCallback){
    var promiseObj = new Promise(function(resolve, reject){
@@ -266,7 +270,7 @@ function chartFactory(typeOfChart,data,DOMElement)
     const svg = d3.select('svg');
     const svgContainer = d3.select('#barChart');
     
-    const margin = 80;
+    const margin = 120;
     const width = 700 - 2 * margin;
     const height = 500 - 2 * margin;
 
@@ -293,10 +297,12 @@ function chartFactory(typeOfChart,data,DOMElement)
 	  //
     chart.append('g')
       .attr('transform', `translate(0, ${height})`)
-      .call(d3.axisBottom(xScale));
+      .call(d3.axisBottom(xScale))
+		  .attr('transform', 'scale('+params.textSize+')');
 
     chart.append('g')
-      .call(d3.axisLeft(yScale));
+      .call(d3.axisLeft(yScale))
+		  .attr('transform', 'scale('+params.textSize+')');
 
     // vertical grid lines
     // chart.append('g')
@@ -313,6 +319,7 @@ function chartFactory(typeOfChart,data,DOMElement)
         .tickSize(-width, 0, 0)
         .tickFormat('')
       )
+		  .attr('transform', 'scale('+params.textSize+')')
 
     const barGroups = chart.selectAll()
       .data(sample)
@@ -329,6 +336,7 @@ function chartFactory(typeOfChart,data,DOMElement)
       .attr('height', (g) => height - yScale(g.value))
       .attr('width', xScale.bandwidth())
       .attr("fill", (g) => (g.color) )
+		  .attr('transform', 'scale('+params.textSize+')')
       .on('mouseenter', function (actual, i) {
         
 		//d3.selectAll('.value')
@@ -340,7 +348,7 @@ function chartFactory(typeOfChart,data,DOMElement)
 		.transition()             // apply a transition
         .ease(d3.easeSin)           // control the speed of the transition
         .duration(200)           // apply it over 2000 milliseconds
-        .attr('y', (a) => yScale(a.value) - 20)
+      .attr('y', (a) => yScale(a.value) * params.textSize - 20* params.textSize )
 
         d3.select(this)
           .transition()
@@ -357,6 +365,7 @@ function chartFactory(typeOfChart,data,DOMElement)
           .attr('y1', y)
           .attr('x2', width)
           .attr('y2', y)
+		  .attr('transform', 'scale('+params.textSize+')')
 
 		  
 		  /*
@@ -384,7 +393,7 @@ function chartFactory(typeOfChart,data,DOMElement)
 		  .transition()             // apply a transition
         .ease(d3.easeSin)           // control the speed of the transition
         .duration(400)           // apply it over 2000 milliseconds
-        .attr('y', (a) => yScale(a.value) - 10)
+      .attr('y', (a) => yScale(a.value) * params.textSize - 10)
 		
 
         d3.select(this)
@@ -401,8 +410,8 @@ function chartFactory(typeOfChart,data,DOMElement)
     barGroups 
       .append('text')
       .attr('class', 'value')
-      .attr('x', (a) => xScale(a.x_axis) + xScale.bandwidth() / 2)
-      .attr('y', (a) => yScale(a.value) - 10)
+      .attr('x', (a) => (xScale(a.x_axis) + xScale.bandwidth() / 2) * params.textSize)
+      .attr('y', (a) => yScale(a.value) * params.textSize - 10)
       .attr('text-anchor', 'middle')
       .text((a) => a.value)
       //.text((a) => `${a.value}%`)
@@ -472,7 +481,7 @@ function chartFactory(typeOfChart,data,DOMElement)
     const svg = d3.select('svg');
     const svgContainer = d3.select('#barChart');
     
-    const margin = 80;
+    const margin = 120;
     const width = 500 - 2 * margin;
     const height = 700 - 2 * margin;
 
@@ -511,14 +520,19 @@ function chartFactory(typeOfChart,data,DOMElement)
 	  */
 	  
 	//data swap:
+
+	//this changes the scale of the text size
+	//make a parameter for this
 	
     chart.append('g')
       .attr('transform', `translate(0,-0)`)
+      .attr('transform', `scale(` + params.textSize + `)`)
       .call(d3.axisLeft(xScale));
 	  
 
 	chart.append('g')
       .attr('transform', `rotate(0)`)
+      .attr('transform', `scale(` + params.textSize + `)`)
       .call(d3.axisTop(yScale));
 
     // vertical grid lines
@@ -536,6 +550,7 @@ function chartFactory(typeOfChart,data,DOMElement)
         .tickSize(-width, 0, 0)
         .tickFormat('')
       )
+      .attr('transform', `scale(` + params.textSize + `)`)
 	  
 	  const x_val = (a) => height-yScale(a.value) + 305;
 	  const y_val = (a) => xScale(a.x_axis) + xScale.bandwidth() / 2 + 5;
@@ -544,8 +559,7 @@ function chartFactory(typeOfChart,data,DOMElement)
       .data(sample)
       .enter()
       .append('g')
-
-	  
+      .attr('transform', `scale(` + params.textSize + `)`)
 	  
 	   barGroups 
       .append('text')
@@ -593,10 +607,9 @@ function chartFactory(typeOfChart,data,DOMElement)
           .attr('x1', 0)
           .attr('y1', y-height)
           .attr('x2', width)
-          .attr('y2', y-height)
-		  .attr('transform', 'rotate(90)')
+          .attr('y2', y-height) 
+		  .attr('transform', 'scale('+params.textSize+')'+',rotate(90)')
 
-		  
 		  /*
         barGroups.append('text')
           .attr('class', 'divergence')
@@ -777,13 +790,13 @@ var pie = new d3pie(DOMElement, {
 		"title": {
 			"text": "Sample Data RCSB PDB",
 			"fontSize": 0,
-			"font": "verdana"
+			"font": "Roboto"
 		},
 		"subtitle": {
 			"text": "This is sample data from rcsb pdb",
 			"color": "#999999",
 			"fontSize": 0,
-			"font": "verdana"
+			"font": "Roboto"
 		},
 		"titleSubtitlePadding": 12
 	},
@@ -791,7 +804,7 @@ var pie = new d3pie(DOMElement, {
 		"text": "Source: RCSB PDB",
 		"color": "#999999",
 		"fontSize": 0,
-		"font": "open sans",
+		"font": "Roboto",
 		"location": "bottom-center"
 	},
 	"size": {
@@ -842,16 +855,17 @@ var pie = new d3pie(DOMElement, {
 			"hideWhenLessThanPercentage": 3
 		},
 		"mainLabel": {
-			"font": "verdana"
+			"font": "Roboto"
 		},
 		"percentage": {
 			"color": "#111111",
-			"font": "verdana",
+			"font": "Roboto",
 			"decimalPlaces": 0
 		},
 		"value": {
 			"color": "#FFFFFF",
-			"font": "verdana"
+			"font": "Roboto",
+			"fontSize": 15,
 		},
 		"lines": {
 			"enabled": true,

@@ -21,12 +21,14 @@ html, body {
    align-items: center;
    flex-basis: 100%;
 }
-
-.row {
-   flex-direction: row;
+.wholeChartContaner
+{
    display: flex;
-   align-items: stretch;
+   flex-direction: column;
    justify-content: center;
+   align-items: center;
+   text-align: center;
+   flex-basis: 100%;
 }
 
 /*start bar chart vertical*/
@@ -76,6 +78,11 @@ line#limit {
 	opacity: 0;
 	transition: opacity, background 0.25s 0.25s ease;
 	-webkit-transition: opacity 0.25s, background 0.25s ease;
+	display: flex;
+	
+   justify-content: center;
+   align-items: center;
+	
 }
 
 
@@ -92,6 +99,7 @@ line#limit {
 	opacity: 0;
 	transition: opacity, background 0.25s 0.25s ease;
 	-webkit-transition: opacity 0.25s, background 0.25s ease;
+	
 }
  
 
@@ -114,8 +122,12 @@ line#limit {
 	-webkit-transition: opacity 0.25s, background 0.25s ease;
 }
 
-
-
+#pieChartDataColumn
+{
+    height: 30em;
+    width: 10em;
+    overflow-y: auto;
+}
 
 
 /*end bar chart vertical*/
