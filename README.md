@@ -14,6 +14,10 @@ General Charting Library for plotting statistical data.
 [devDependencies-badge]: https://img.shields.io/david/dev/mrdoob/three.js.svg
 [devDependencies-badge-url]: https://david-dm.org/mrdoob/three.js#info=devDependencies
 
+## Demo
+
+http://htmlpreview.github.io/?https://github.com/rcsb/TopChartJS/blob/master/index.html
+
 ## Usage
 
 Modify the configuration JSON file located in JSON/config.json with the target html id or class nodes in the DOM.
