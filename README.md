@@ -25,7 +25,7 @@ Modify the configuration JSON file located in JSON/config.json with the target h
 Then specify the parameters specifically for each target.
 
 The config.json file will be populated with a sample subset of all of the features.
-The complete List of features per chart and their function will be listed below
+The complete list of features per chart and their function will be listed below
 
 ## Features
 
