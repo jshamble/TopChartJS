@@ -21,7 +21,7 @@ http://htmlpreview.github.io/?https://github.com/rcsb/TopChartJS/blob/master/ind
 
 ## Usage
 
-Modify the configuration JSON file located in JSON/config.json with the target html id or class nodes in the DOM.
+Modify the configuration JSON file located in json/config.json with the target html id or class nodes in the DOM.
 Then specify the parameters specifically for each target.
 
 The config.json file will be populated with a sample subset of all of the features.
