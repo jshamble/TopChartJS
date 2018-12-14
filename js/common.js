@@ -5,8 +5,10 @@ var params =
 	textSize : 1.5
 };
 
-function getFileOrDirectoryFromServer(url, doneCallback){
-   var promiseObj = new Promise(function(resolve, reject){
+function getFileOrDirectoryFromServer(url, doneCallback)
+{
+   var promiseObj = new Promise(function(resolve, reject)
+   {
       var xhr = new XMLHttpRequest();
       xhr.open("GET", url, true);
       xhr.send();
@@ -26,7 +28,7 @@ function getFileOrDirectoryFromServer(url, doneCallback){
       }
    }
    console.log("request sent succesfully");
- });
+   });
  return promiseObj;
 }
 
@@ -348,7 +350,7 @@ function chartFactory(typeOfChart,data,DOMElement)
 		.transition()             // apply a transition
         .ease(d3.easeSin)           // control the speed of the transition
         .duration(200)           // apply it over 2000 milliseconds
-      .attr('y', (a) => yScale(a.value) * params.textSize - 20* params.textSize )
+      .attr('y', (a) => (yScale(a.value) - 20* params.textSize)  )
 
         d3.select(this)
           .transition()
@@ -393,7 +395,7 @@ function chartFactory(typeOfChart,data,DOMElement)
 		  .transition()             // apply a transition
         .ease(d3.easeSin)           // control the speed of the transition
         .duration(400)           // apply it over 2000 milliseconds
-      .attr('y', (a) => yScale(a.value) * params.textSize - 10)
+      .attr('y', (a) => yScale(a.value) - 10)
 		
 
         d3.select(this)
@@ -410,10 +412,11 @@ function chartFactory(typeOfChart,data,DOMElement)
     barGroups 
       .append('text')
       .attr('class', 'value')
-      .attr('x', (a) => (xScale(a.x_axis) + xScale.bandwidth() / 2) * params.textSize)
-      .attr('y', (a) => yScale(a.value) * params.textSize - 10)
+      .attr('x', (a) => (xScale(a.x_axis) + xScale.bandwidth() / 2))
+      .attr('y', (a) => yScale(a.value) - 10)
       .attr('text-anchor', 'middle')
       .text((a) => a.value)
+	  .attr('transform', 'scale('+params.textSize+')');
       //.text((a) => `${a.value}%`)
     
     svg
