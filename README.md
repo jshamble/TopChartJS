@@ -29,6 +29,8 @@ The complete list of features per chart and their function will be listed below
 
 ## Features
 
+Note: This library is currently in Beta. An official release as an npm package is currently in the works.
+
 ## Goals
 
 Different Chart types:
