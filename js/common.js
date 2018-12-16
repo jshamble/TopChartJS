@@ -240,9 +240,6 @@ function chartFactory(typeOfChart,data,DOMElement)
 			color: '#507dca'
 		  }
 		];*/
-		
-		
-
 	
 	if(typeOfChart == 'bar vertical')
 	{
