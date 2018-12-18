@@ -1,0 +1,25 @@
+{ 
+  "HTMLNodes": 
+  [ {
+		"DOM_name": "wholeChartContainer1",
+		"children":
+		[
+			{ 
+				"properties": 
+				{
+					"dom_type": "id",
+					"data_url": "http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/entry/resolution",
+					"color": "rand",
+					"chart_type": "pie",
+					"viewBox":"750 500 0 0",
+					"css":[{"font":"Roboto","font_color":"#FFFFFF"}],
+					"filter":"*",
+					"axis_labels":
+					[
+						{"position":[0,0],"css":[{"font":"Roboto","font_color":"#FFFFFF"}]}
+					]
+				}
+			} 
+		]
+   } ]
+}

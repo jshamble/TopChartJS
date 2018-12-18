@@ -21,16 +21,102 @@ http://htmlpreview.github.io/?https://github.com/rcsb/TopChartJS/blob/master/ind
 
 ## Usage
 
+Include css/common.css and all javascript files the js folder.
+
 Modify the configuration JSON file located in json/config.json with the target html id or class nodes in the DOM.
 Then specify the parameters specifically for each target.
 
 The config.json file will be populated with a sample subset of all of the features.
-The complete list of features per chart and their function will be listed below
+The complete list of features per chart and their function will be listed in the features below.
+
+See the demo html file for an example template.
+
+http://htmlpreview.github.io/?https://github.com/rcsb/TopChartJS/blob/master/index.html
+
+## Example config.json
+
+(Validated JSON file with https://jsonlint.com/ )
+
+{ 
+  "htmlNodes": 
+  [ {
+		"dom_node_name": "wholeChartContainer1",
+		"children":
+		[
+			{
+				"target":"pie_chart",
+				"props": 
+				[
+					{
+						"dom_type": "id",
+						"color": "rand",
+						"chart_type": "pie",
+						"pie_target": "pieChartDataColumn",
+						"viewbox":[750,500,0,0],
+						"css":[{"font":"Roboto","font_color":"#FFFFFF"}],
+						"filter":"*",
+						"axis_labels":
+						[
+							{"position":[0,0],"css":[{"font":"Roboto","font_color":"#FFFFFF"}]}
+						]
+					}
+				]
+			},
+			{
+				"target":"horiz_bar_chart",
+				"props": 
+				[
+					{
+						"dom_type": "id",
+						"color": "rand",
+						"chart_type": "horizontal bar",
+						"viewbox":[750,500,0,0],
+						"css":[{"font":"Roboto","font_color":"#FFFFFF"}],
+						"filter":"*",
+						"axis_labels":
+						[
+							{"position":[0,0],"css":[{"font":"Roboto","font_color":"#FFFFFF"}]}
+						]
+					}
+				]
+			}
+		]
+   } ]
+}
 
 ## Features
 
-Note: This library is currently in Beta. An official release as an npm package is currently in the works.
+Customizeable user parameters for enhanced user experience.
+There is an optional GUI to edit these parameters and update the JSON file on-the-fly.
 
+#### dom_node_name
+	This indicates the target html DOM node for the Chart to be attached to. 
+	Supply either the class name or id.
+	You can use flexbox and css to style the inner chart elements however you want (column, grid, row grid, etc... it's up to you)
+	A javascript mpa stores all relevand parsed data from the config.json file. 
+	Map[Html target node name] -> .children. The children will each be the "charts" associated with the html node.
+#### css
+	color: The Font color of the chart.
+	font: The Font type, from google fonts.
+#### chart_type
+	Indicates what chart you want to display. THe follwoing types are available:
+		-Pie
+		-Horizontal Bar
+		-Vertical Bar
+#### pie_target
+	id name of the <div></div> of the adjacent data to the pie chart
+#### viewbox
+	The dimensions of the viewbox of the svg element. 
+	Search svg viewbox for more info on how this works.
+#### search regex / filter data -> 
+	Filter in / out which range of data to be rendered. [ inclusive_low, inclusive_high ( exlusive_low, exclusive_high )
+#### axis label : css props [position, font color]
+		
+
+## Plans
+
+Having d3 transforms like translations, scales, etc. paresable.
+		
 ## Goals
 
 Different Chart types:

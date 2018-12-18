@@ -21,7 +21,7 @@ html, body {
    align-items: center;
    flex-basis: 100%;
 }
-.wholeChartContaner
+#wholeChartContaner1
 {
    display: flex;
    flex-direction: column;
