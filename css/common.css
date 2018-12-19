@@ -89,7 +89,7 @@ body div[id^='pChartDataColumn']
     overflow-y: auto;
 }
 
-body div[id^='chart_select']
+body select[id^='chart_select']
 {	
     font-weight: bold;	
     background-color: white; 
@@ -104,7 +104,6 @@ body div[id^='chart_select']
 	opacity: 100;
 	transition: opacity, background 0.25s 0.25s ease;
 	-webkit-transition: opacity 0.25s, background 0.25s ease;
-	height: 20px;
 }
 
 

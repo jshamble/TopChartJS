@@ -167,14 +167,35 @@ function loadChartData()
 			var pieChartDataColumn = document.createElement('div');
 			pieChartDataColumn.id = "pChartDataColumn" + i;
 			
-			var chart_select = document.createElement('div');
+			var chart_select = document.createElement('select');
 			
 			//https://stackoverflow.com/questions/6318385/javascript-dynamic-onchange-event
-			chart_select.onchange ="onChartChange(this.id)";
 			
+			
+			chart_select.addEventListener("change", function() 
+			{
+				chart_name[this.id.slice(-1)] = document.getElementById("chart_select"+this.id.slice(-1)).value;
+				// Store
+				localStorage.setItem("chart_select"+this.id.slice(-1), chart_name[this.id.slice(-1)]);
+				
+				//the + id.slice(-1) is the dynamcially generated "index" of the created chart, for interal use and bookkeeping only.
+				
+				while(document.getElementById("chartContainer" + this.id.slice(-1) ).children.length > 0)
+				{
+					document.getElementById("chartContainer" + this.id.slice(-1)).removeChild(document.getElementById("chartContainer" + this.id.slice(-1)).children[0]);           // Remove <ul>'s first child node (index 0)
+				}
+				
+				while(document.getElementById("pChartDataColumn"+ this.id.slice(-1)).children.length > 0)
+				{
+					document.getElementById("pChartDataColumn"+ this.id.slice(-1)).removeChild(document.getElementById("pChartDataColumn"+ this.id.slice(-1)).children[0]);           // Remove <ul>'s first child node (index 0)
+				}
+				
+				chartFactory(chart_name[this.id.slice(-1)],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+ this.id.slice(-1)) );
+				
+			});
+			 
 			chart_select.id = 'chart_select'+i;
 			chart_select.className = 'chart_button_select'+i;
-			
 			
 			var URL = config["HTMLNodes"][k]["children"][i]["properties"]["data_url"];
 					 
@@ -188,11 +209,7 @@ function loadChartData()
 			childChartNode.appendChild(gridContainer);
 			childChartNode.appendChild(chart_select);
 			
-			$('.chart_button_select'+i).empty();
-			$.each(chart_type, function(z, p) {
-				$('.chart_button_select'+i).append($('<option></option>').val(p).html(p));
-			});
-				
+			
 			if(document.getElementById(config["HTMLNodes"][k]["DOM_name"]) != null)
 			{
 				document.getElementById(config["HTMLNodes"][k]["DOM_name"]).appendChild(childChartNode);
@@ -204,6 +221,13 @@ function loadChartData()
 					document.getElementsByClassName(config["HTMLNodes"][k]["DOM_name"])[j].appendChild(childChartNode);	
 				}
 			}
+			
+			
+			$('.chart_button_select'+i).empty();
+			
+			$.each(chart_type, function(z, p) {
+				$('.chart_button_select'+i).append($('<option></option>').val(p).html(p));
+			});
 			
 				request({url: URL})
 				.then(data => {
@@ -221,10 +245,9 @@ function loadChartData()
 						if(last_known_entry_name == "resolution")
 						{
 							map_DATA_to_JSON["resolution"] = JSON.parse(data);//JSON.parse(file_and_dir_names);
-							//chartFactory("bar horizontal",map_DATA_to_JSON[entry_name],document.getElementById("chartContainer"+i) );
-							//chartFactory("bar vertical",map_DATA_to_JSON[entry_name],document.getElementById("chartContainer"+i) );
+							//chartFactory("bar horizontal",map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+i) );
+							//chartFactory("bar vertical",map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+i) );
 							chartFactory(chart_name[i],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+i));
-									
 						}
 					
 					
