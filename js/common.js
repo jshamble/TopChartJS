@@ -5,32 +5,6 @@ var params =
 	textSize : 1.5
 };
 
-window.onload = function () 
-{
-	request({url: "./json/config.json"})
-    .then(data => {
-        config = JSON.parse(data);
-		loadChartData();
-    })
-    .catch(error => {
-        console.log(error);
-    });
-	
-	/*
-	getFileOrDirectoryFromServer("./json/config.json", function(file_and_dir_names) 
-		{
-			if (typeof file_and_dir_names !== 'undefined') 
-			{
-				console.log("An error occured, file could not be read in function createDataArrays(). Please Email the Developer about this issue");
-			}
-			else 
-			{
-				config = file_and_dir_names;
-				loadChartData();
-			}
-		}); */
-}
-
 /*
 async function getFileOrDirectoryFromServer(url, doneCallback)
 {
@@ -160,9 +134,10 @@ function loadChartData()
 			var gridContainer = document.createElement('div');
 			gridContainer.id = "gridContainer" + i;
 			
-			var chartContainer = document.createElement('svg');
+			//see Namespace URI's, must use for svgs https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS#Valid%20Namespace%20URIs
+			var chartContainer = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 			chartContainer.id = "chartContainer" + i;
-			chartContainer.viewBox =  config["HTMLNodes"][k]["children"]["viewBox"];
+			chartContainer.setAttribute("viewBox", config["HTMLNodes"][k]["children"][i]["properties"]["viewBox"]);
 			
 			var pieChartDataColumn = document.createElement('div');
 			pieChartDataColumn.id = "pChartDataColumn" + i;
@@ -172,34 +147,14 @@ function loadChartData()
 			//https://stackoverflow.com/questions/6318385/javascript-dynamic-onchange-event
 			
 			
-			chart_select.addEventListener("change", function() 
-			{
-				chart_name[this.id.slice(-1)] = document.getElementById("chart_select"+this.id.slice(-1)).value;
-				// Store
-				localStorage.setItem("chart_select"+this.id.slice(-1), chart_name[this.id.slice(-1)]);
-				
-				//the + id.slice(-1) is the dynamcially generated "index" of the created chart, for interal use and bookkeeping only.
-				
-				while(document.getElementById("chartContainer" + this.id.slice(-1) ).children.length > 0)
-				{
-					document.getElementById("chartContainer" + this.id.slice(-1)).removeChild(document.getElementById("chartContainer" + this.id.slice(-1)).children[0]);           // Remove <ul>'s first child node (index 0)
-				}
-				
-				while(document.getElementById("pChartDataColumn"+ this.id.slice(-1)).children.length > 0)
-				{
-					document.getElementById("pChartDataColumn"+ this.id.slice(-1)).removeChild(document.getElementById("pChartDataColumn"+ this.id.slice(-1)).children[0]);           // Remove <ul>'s first child node (index 0)
-				}
-				
-				chartFactory(chart_name[this.id.slice(-1)],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+ this.id.slice(-1)) );
-				
-			});
+			
 			 
 			chart_select.id = 'chart_select'+i;
 			chart_select.className = 'chart_button_select'+i;
 			
-			var URL = config["HTMLNodes"][k]["children"][i]["properties"]["data_url"];
+			var URL_JSON = config["HTMLNodes"][k]["children"][i]["properties"]["data_url"];
 					 
-			var split_URL = URL.split('/');
+			var split_URL = URL_JSON.split('/');
 					
 			last_known_entry_name = split_URL[split_URL.length-1];
 					
@@ -222,15 +177,37 @@ function loadChartData()
 				}
 			}
 			
+			chart_select.addEventListener("change", function() 
+			{
+				chart_name[this.id.slice(-1)] = document.getElementById("chart_select"+this.id.slice(-1)).value;
+				// Store
+				localStorage.setItem("chart_select"+this.id.slice(-1), chart_name[this.id.slice(-1)]);
+				
+				//the + id.slice(-1) is the dynamcially generated "index" of the created chart, for interal use and bookkeeping only.
+				
+				while(document.getElementById("chartContainer" + this.id.slice(-1) ).children.length > 0)
+				{ 
+					document.getElementById("chartContainer" + this.id.slice(-1)).removeChild(document.getElementById("chartContainer" + this.id.slice(-1)).children[0]);           // Remove <ul>'s first child node (index 0)
+				}
+				
+				while(document.getElementById("pChartDataColumn"+ this.id.slice(-1)).children.length > 0)
+				{
+					document.getElementById("pChartDataColumn"+ this.id.slice(-1)).removeChild(document.getElementById("pChartDataColumn"+ this.id.slice(-1)).children[0]);           // Remove <ul>'s first child node (index 0)
+				}
+				
+				chartFactory(chart_name[this.id.slice(-1)],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+ this.id.slice(-1)) );
+				
+			});
+			
 			
 			$('.chart_button_select'+i).empty();
 			
 			$.each(chart_type, function(z, p) {
 				$('.chart_button_select'+i).append($('<option></option>').val(p).html(p));
 			});
-			
-				request({url: URL})
-				.then(data => {
+				request({url: URL_JSON})
+				.then(data => 
+				{
 						if(localStorage.getItem("chart_select"+i) != null)
 						{
 							chart_name[i] = localStorage.getItem("chart_select"+i);
@@ -241,50 +218,16 @@ function loadChartData()
 						}
 						
 						setChartChange('chart_select'+i);
-								
-						if(last_known_entry_name == "resolution")
-						{
-							map_DATA_to_JSON["resolution"] = JSON.parse(data);//JSON.parse(file_and_dir_names);
-							//chartFactory("bar horizontal",map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+i) );
-							//chartFactory("bar vertical",map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+i) );
-							chartFactory(chart_name[i],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+i));
-						}
-					
-					
+						map_DATA_to_JSON[last_known_entry_name] = JSON.parse(data); 
+						chartFactory(chart_name[i],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+i));
+						
+						
 				})
 				.catch(error => {
 					console.log(error);
 				});
 							
-			/*getFileOrDirectoryFromServer(URL, function(file_and_dir_names) 
-			{
-				if (typeof file_and_dir_names !== 'undefined') 
-				{
-					console.log("An error occured, file could not be read in function createDataArrays(). Please Email the Developer about this issue");
-				}
-				else 
-				{			
-					if(localStorage.getItem("chart_select"+i) != null)
-					{
-						chart_name[i] = localStorage.getItem("chart_select"+i);
-					}
-					else
-					{
-						chart_name[i] = "pie";
-					}
-					
-					setChartChange('chart_select'+i);
-							
-					if(last_known_entry_name == "resolution")
-					{
-						map_DATA_to_JSON["resolution"] = file_and_dir_names;//JSON.parse(file_and_dir_names);
-						//chartFactory("bar horizontal",map_DATA_to_JSON[entry_name],document.getElementById("chartContainer"+i) );
-						//chartFactory("bar vertical",map_DATA_to_JSON[entry_name],document.getElementById("chartContainer"+i) );
-						chartFactory(chart_name[i],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+i) );
-								
-					}
-				}
-			});*/
+			
 		}
 		
 		
@@ -294,62 +237,9 @@ function loadChartData()
 
 function chartFactory(typeOfChart,data,DOMElement)
 {
-		 /* const sample = [
-		  {
-			language: 'Rust',
-			value: 78.9,
-			color: '#000000'
-		  },
-		  {
-			language: 'Kotlin',
-			value: 75.1,
-			color: '#00a2ee'
-		  },
-		  {
-			language: 'Python',
-			value: 68.0,
-			color: '#fbcb39'
-		  },
-		  {
-			language: 'TypeScript',
-			value: 67.0,
-			color: '#007bc8'
-		  },
-		  {
-			language: 'Go',
-			value: 65.6,
-			color: '#65cedb'
-		  },
-		  {
-			language: 'Swift',
-			value: 65.1,
-			color: '#ff6e52'
-		  },
-		  {
-			language: 'JavaScript',
-			value: 61.9,
-			color: '#f9de3f'
-		  },
-		  {
-			language: 'C#',
-			value: 60.4,
-			color: '#5d2f8e'
-		  },
-		  {
-			language: 'F#',
-			value: 59.6,
-			color: '#008fc9'
-		  },
-		  {
-			language: 'Clojure',
-			value: 59.6,
-			color: '#507dca'
-		  }
-		];*/
-	
 	if(typeOfChart == 'bar vertical')
 	{
-		console.log(data);
+		//console.log(data);
 		
 		//alert(data['drilldowns'][0]['categories'][0]["field_name"]);
 	
@@ -357,12 +247,12 @@ function chartFactory(typeOfChart,data,DOMElement)
 		
 		 const sample = [];
 		 
-		 var groups = data['drilldowns'][0]['categories'][0]['groups'];
-		 var max_range = 0;
+		 let groups = data['drilldowns'][0]['categories'][0]['groups'];
+		 let max_range = 0;
 		 
-		 for(var i = 0; i < groups.length; i++)
+		 for(let i = 0; i < groups.length; i++)
 		 {
-			 var data_object = {};
+			 let data_object = {};
 			 data_object.x_axis = groups[i].label;
 			 data_object.value = groups[i].population;
 			 data_object.color = colors[getRandIntRange(0,colors.length-1)];
@@ -371,9 +261,9 @@ function chartFactory(typeOfChart,data,DOMElement)
 			 sample.push(data_object);
 			 //checek if smaple data matches object
 		 }
-		
-    const svg = d3.select('svg');
-    const svgContainer = d3.select('#barChart');
+	
+	const svg = d3.select('svg');
+	const svgContainer = d3.select('#chartContainer'+DOMElement.id.slice(-1)   );
     
     const margin = 120;
     const width = 700 - 2 * margin;
@@ -397,7 +287,6 @@ function chartFactory(typeOfChart,data,DOMElement)
 
     const makeYLines = () => d3.axisLeft()
       .scale(yScale)
-
 	  
 	  //
     chart.append('g')
@@ -520,7 +409,6 @@ function chartFactory(typeOfChart,data,DOMElement)
       .attr('text-anchor', 'middle')
       .text((a) => a.value)
 	  .attr('transform', 'scale('+params.textSize+')');
-      //.text((a) => `${a.value}%`)
     
     svg
       .append('text')
@@ -538,15 +426,6 @@ function chartFactory(typeOfChart,data,DOMElement)
       .attr('text-anchor', 'middle')
       .text(data['drilldowns'][0]['categories'][0]["field_name"] + ' data')
 	  
-
-	  /*
-    svg.append('text')
-      .attr('class', 'title')
-      .attr('x', width / 2 + margin)
-      .attr('y', 40)
-      .attr('text-anchor', 'middle')
-      .text(data['drilldowns'][0]['categories'][0]["field_name"] + ' data')*/
-
     svg.append('text')
       .attr('class', 'source')
       .attr('x', width - margin / 2)
@@ -559,16 +438,16 @@ function chartFactory(typeOfChart,data,DOMElement)
 	}
 	else if(typeOfChart == 'bar horizontal')
 	{
-		console.log(data);
+		//console.log(data);
 		
 		 const sample = [];
 		 
-		 var groups = data['drilldowns'][0]['categories'][0]['groups'];
-		 var max_range = 0;
+		 let groups = data['drilldowns'][0]['categories'][0]['groups'];
+		 let max_range = 0;
 		 
-		 for(var i = 0; i < groups.length; i++)
+		 for(let i = 0; i < groups.length; i++)
 		 {
-			 var data_object = {};
+			 let data_object = {};
 			 data_object.x_axis = groups[i].label;
 			 data_object.value = groups[i].population;
 			 data_object.color = colors[getRandIntRange(0,colors.length-1)];
@@ -579,227 +458,222 @@ function chartFactory(typeOfChart,data,DOMElement)
 		 }
 		 
 		 //subtract the max of the data set of each value to properly reverse the axis
-		 for(var i = 0; i < groups.length; i++)
+		 for(let i = 0; i < groups.length; i++)
 		 {
 			 sample[i].value = max_range - sample[i].value;
 		 }
 		
-    const svg = d3.select('svg');
-    const svgContainer = d3.select('#barChart');
-    
-    const margin = 120;
-    const width = 500 - 2 * margin;
-    const height = 700 - 2 * margin;
+		const svg = d3.select('svg');
+		const svgContainer = d3.select('#chartContainer'+DOMElement.id.slice(-1)   );
+		
+		const margin = 120;
+		const width = 500 - 2 * margin;
+		const height = 700 - 2 * margin;
 
-    const chart = svg.append('g')
-      .attr('transform', `translate(${margin}, ${margin})`);
+		const chart = svg.append('g').attr('transform', `translate(${margin}, ${margin})`);
 
-	  
-	//todo: two of them.
-    const xScale = d3.scaleBand()
-      .range([0, width])
-      .domain(sample.map((s) => s.x_axis))
-      .padding(0.3)
-    
-    const yScale = d3.scaleLinear()
-      .range([height,0])
-      .domain([max_range,0]);
-	  
+		//todo: two of them.
+		const xScale = d3.scaleBand()
+		  .range([0, width])
+		  .domain(sample.map((s) => s.x_axis))
+		  .padding(0.3)
+		
+		const yScale = d3.scaleLinear()
+		  .range([height,0])
+		  .domain([max_range,0]);
+		  
 
-    // vertical grid lines
-    // const makeXLines = () => d3.axisBottom()
-    //   .scale(xScale)
+		// vertical grid lines
+		// const makeXLines = () => d3.axisBottom()
+		//   .scale(xScale)
 
-    const makeYLines = () => d3.axisTop()
-      .scale(yScale)
+		const makeYLines = () => d3.axisTop()
+		  .scale(yScale)
 
-	//data swap:  
-	  
-	  /*
-    chart.append('g')
-      .attr('transform', `rotate(0)`)
-      .call(d3.axisLeft(yScale));
+		//data swap:  
+		  
+		  /*
+		chart.append('g')
+		  .attr('transform', `rotate(0)`)
+		  .call(d3.axisLeft(yScale));
 
-    chart.append('g')
-      .attr('transform', `translate(0,-0)`)
-      .call(d3.axisTop(xScale));
-	  */
-	  
-	//data swap:
+		chart.append('g')
+		  .attr('transform', `translate(0,-0)`)
+		  .call(d3.axisTop(xScale));
+		  */
+		  
+		//data swap:
 
-	//this changes the scale of the text size
-	//make a parameter for this
-	
-    chart.append('g')
-      .attr('transform', `translate(0,-0)`)
-      .attr('transform', `scale(` + params.textSize + `)`)
-      .call(d3.axisLeft(xScale));
-	  
+		//this changes the scale of the text size
+		//make a parameter for this
+		
+		chart.append('g')
+		  .attr('transform', `translate(0,-0)`)
+		  .attr('transform', `scale(` + params.textSize + `)`)
+		  .call(d3.axisLeft(xScale));
+		  
 
-	chart.append('g')
-      .attr('transform', `rotate(0)`)
-      .attr('transform', `scale(` + params.textSize + `)`)
-      .call(d3.axisTop(yScale));
+		chart.append('g')
+		  .attr('transform', `rotate(0)`)
+		  .attr('transform', `scale(` + params.textSize + `)`)
+		  .call(d3.axisTop(yScale));
 
-    // vertical grid lines
-    // chart.append('g')
-    //   .attr('class', 'grid')
-    //   .attr('transform', `translate(0, ${height})`)
-    //   .call(makeXLines()
-    //     .tickSize(-height, 0, 0)
-    //     .tickFormat('')
-    //   )
+		// vertical grid lines
+		// chart.append('g')
+		//   .attr('class', 'grid')
+		//   .attr('transform', `translate(0, ${height})`)
+		//   .call(makeXLines()
+		//     .tickSize(-height, 0, 0)
+		//     .tickFormat('')
+		//   )
 
-    chart.append('g')
-      .attr('class', 'grid')
-      .call(makeYLines()
-        .tickSize(-width, 0, 0)
-        .tickFormat('')
-      )
-      .attr('transform', `scale(` + params.textSize + `)`)
-	  
-	  const x_val = (a) => height-yScale(a.value) + 305;
-	  const y_val = (a) => xScale(a.x_axis) + xScale.bandwidth() / 2 + 5;
+		chart.append('g')
+		  .attr('class', 'grid')
+		  .call(makeYLines()
+			.tickSize(-width, 0, 0)
+			.tickFormat('')
+		  )
+		  .attr('transform', `scale(` + params.textSize + `)`)
+		  
+		  const x_val = (a) => height-yScale(a.value) + 305;
+		  const y_val = (a) => xScale(a.x_axis) + xScale.bandwidth() / 2 + 5;
 
-    const barGroups = chart.selectAll()
-      .data(sample)
-      .enter()
-      .append('g')
-      .attr('transform', `scale(` + params.textSize + `)`)
-	  
-	   barGroups 
-      .append('text')
-      .attr('class', 'value')
-      .attr('y', (a) => xScale(a.x_axis) + xScale.bandwidth() / 2 + 5)
-      .attr('x', (a) => height-yScale(a.value) + 30)
-      .attr('text-anchor', 'middle')
-      .text((a) => max_range - a.value)
-      // .attr('transform', 'translate(${x_val}, ${y_val})')
-      //.text((a) => `${a.value}%`)
-	  
-    barGroups
-      .append('rect')
-      .attr('class', 'bar')
-      .attr('x', (g) => xScale(g.x_axis))
-      .attr('y', (g) => yScale(g.value) - height)
-      .attr('height', (g) => height - yScale(g.value))
-      .attr('width', xScale.bandwidth())
-      .attr('transform', 'rotate(90)')
-      .attr("fill", (g) => (g.color) )
-	        .on('mouseenter', function (actual, i) {
-        
-		//select a specific one with the filter function:
-		//https://stackoverflow.com/questions/28390754/get-one-element-from-d3js-selection-by-index
-		d3.selectAll('.value')
-		.filter(function (d, x) { return i === x;})
-        .attr("fill", (g) => ("#ED2939") )
-		.transition()             // apply a transition
-        .ease(d3.easeSin)           // control the speed of the transition
-        .duration(200)           // apply it over 2000 milliseconds
-        .attr('x', (a) => height-yScale(a.value) + 40)
-	    // .attr("transform", "translate(480,480)scale(23)rotate(180)")
+		const barGroups = chart.selectAll()
+		  .data(sample)
+		  .enter()
+		  .append('g')
+		  .attr('transform', `scale(` + params.textSize + `)`)
+		  
+		   barGroups 
+		  .append('text')
+		  .attr('class', 'value')
+		  .attr('y', (a) => xScale(a.x_axis) + xScale.bandwidth() / 2 + 5)
+		  .attr('x', (a) => height-yScale(a.value) + 30)
+		  .attr('text-anchor', 'middle')
+		  .text((a) => max_range - a.value)
+		  // .attr('transform', 'translate(${x_val}, ${y_val})')
+		  //.text((a) => `${a.value}%`)
+		  
+		barGroups
+		  .append('rect')
+		  .attr('class', 'bar')
+		  .attr('x', (g) => xScale(g.x_axis))
+		  .attr('y', (g) => yScale(g.value) - height)
+		  .attr('height', (g) => height - yScale(g.value))
+		  .attr('width', xScale.bandwidth())
+		  .attr('transform', 'rotate(90)')
+		  .attr("fill", (g) => (g.color) )
+				.on('mouseenter', function (actual, i) {
+			
+			//select a specific one with the filter function:
+			//https://stackoverflow.com/questions/28390754/get-one-element-from-d3js-selection-by-index
+			d3.selectAll('.value')
+			.filter(function (d, x) { return i === x;})
+			.attr("fill", (g) => ("#ED2939") )
+			.transition()             // apply a transition
+			.ease(d3.easeSin)           // control the speed of the transition
+			.duration(200)           // apply it over 2000 milliseconds
+			.attr('x', (a) => height-yScale(a.value) + 40)
+			// .attr("transform", "translate(480,480)scale(23)rotate(180)")
 
-        d3.select(this)
-          .transition()
-          .duration(300)
-          .attr('opacity', 0.9)
-          .attr('x', (a) => xScale(a.x_axis) - 5)
-          .attr('width', xScale.bandwidth() + 10)
+			d3.select(this)
+			  .transition()
+			  .duration(300)
+			  .attr('opacity', 0.9)
+			  .attr('x', (a) => xScale(a.x_axis) - 5)
+			  .attr('width', xScale.bandwidth() + 10)
 
-        const y = yScale(actual.value)
+			const y = yScale(actual.value)
 
-        const line = chart.append('line')
-          .attr('id', 'limit')
-          .attr('x1', 0)
-          .attr('y1', y-height)
-          .attr('x2', width)
-          .attr('y2', y-height) 
-		  .attr('transform', 'scale('+params.textSize+')'+',rotate(90)')
+			const line = chart.append('line')
+			  .attr('id', 'limit')
+			  .attr('x1', 0)
+			  .attr('y1', y-height)
+			  .attr('x2', width)
+			  .attr('y2', y-height) 
+			  .attr('transform', 'scale('+params.textSize+')'+',rotate(90)')
+
+			  /*
+			barGroups.append('text')
+			  .attr('class', 'divergence')
+			  .attr('x', (a) => xScale(a.x_axis) + xScale.bandwidth() / 2)
+			  .attr('y', (a) => yScale(a.value) + 30)
+			  .attr('fill', 'white')
+			  .attr('text-anchor', 'middle')
+			  .text((a, idx) => {
+				const divergence = (a.value - actual.value).toFixed(1)
+				
+				let text = ''
+				if (divergence > 0) text += '+'
+				text += `${divergence}%`
+
+				return idx !== i ? text : '';
+			  })*/
+
+		  })
+		  .on('mouseleave', function () {
+			d3.selectAll('.value')
+			  .attr('opacity', 1)
+			  .attr("fill", "#000000" )
+			  .transition()             // apply a transition
+			.ease(d3.easeSin)           // control the speed of the transition
+			.duration(400)           // apply it over 2000 milliseconds
+			  .attr('x', (a) => height-yScale(a.value) + 30)
+			
+
+			d3.select(this)
+			  .transition()
+			  .duration(300)
+			  .attr('opacity', 1)
+			  .attr('x', (a) => xScale(a.x_axis))
+			  .attr('width', xScale.bandwidth())
+
+			chart.selectAll('#limit').remove()
+			chart.selectAll('.divergence').remove()
+		  });
+
+		  
+
+		
+		
+		//yScale
+		
+		svg
+		  .append('text')
+		  .attr('class', 'label')
+		  .attr('x', -(height / 2) - margin)
+		  .attr('y', margin / 2.4)
+		  .attr('transform', 'rotate(-90)')
+		  .attr('text-anchor', 'middle')
+		  .text('(%)')
+
+		svg.append('text')
+		  .attr('class', 'label')
+		  .attr('x', width / 2 + margin)
+		  .attr('y', height + margin * 1.7)
+		  .attr('text-anchor', 'middle')
+		  .text(data['drilldowns'][0]['categories'][0]["field_name"] + ' data')
 
 		  /*
-        barGroups.append('text')
-          .attr('class', 'divergence')
-          .attr('x', (a) => xScale(a.x_axis) + xScale.bandwidth() / 2)
-          .attr('y', (a) => yScale(a.value) + 30)
-          .attr('fill', 'white')
-          .attr('text-anchor', 'middle')
-          .text((a, idx) => {
-            const divergence = (a.value - actual.value).toFixed(1)
-            
-            let text = ''
-            if (divergence > 0) text += '+'
-            text += `${divergence}%`
+		svg.append('text')
+		  .attr('class', 'title')
+		  .attr('x', width / 2 + margin)
+		  .attr('y', 40)
+		  .attr('text-anchor', 'middle')
+		  .text(data['drilldowns'][0]['categories'][0]["field_name"] + ' data')*/
 
-            return idx !== i ? text : '';
-          })*/
+		  
+		
 
-      })
-      .on('mouseleave', function () {
-        d3.selectAll('.value')
-          .attr('opacity', 1)
-          .attr("fill", "#000000" )
-		  .transition()             // apply a transition
-        .ease(d3.easeSin)           // control the speed of the transition
-        .duration(400)           // apply it over 2000 milliseconds
-          .attr('x', (a) => height-yScale(a.value) + 30)
-        
-
-        d3.select(this)
-          .transition()
-          .duration(300)
-          .attr('opacity', 1)
-          .attr('x', (a) => xScale(a.x_axis))
-          .attr('width', xScale.bandwidth())
-
-        chart.selectAll('#limit').remove()
-        chart.selectAll('.divergence').remove()
-      });
-
-	  
-
-    
-	
-	//yScale
-	
-    svg
-      .append('text')
-      .attr('class', 'label')
-      .attr('x', -(height / 2) - margin)
-      .attr('y', margin / 2.4)
-      .attr('transform', 'rotate(-90)')
-      .attr('text-anchor', 'middle')
-      .text('(%)')
-
-    svg.append('text')
-      .attr('class', 'label')
-      .attr('x', width / 2 + margin)
-      .attr('y', height + margin * 1.7)
-      .attr('text-anchor', 'middle')
-      .text(data['drilldowns'][0]['categories'][0]["field_name"] + ' data')
-
-	  /*
-    svg.append('text')
-      .attr('class', 'title')
-      .attr('x', width / 2 + margin)
-      .attr('y', 40)
-      .attr('text-anchor', 'middle')
-      .text(data['drilldowns'][0]['categories'][0]["field_name"] + ' data')*/
-
-	  
-	
-
-    svg.append('text')
-      .attr('class', 'source') 
-      .attr('text-anchor', 'start')
-      .text('Source: RSCB PDB Archive, 2018')
-	
+		svg.append('text')
+		  .attr('class', 'source') 
+		  .attr('text-anchor', 'start')
+		  .text('Source: RSCB PDB Archive, 2018')
+		
 	
 	}
 	else if(typeOfChart == 'pie')
 	{
-		
-
-		
 		 const sample = [];
 		 
 		 var groups = data['drilldowns'][0]['categories'][0]['groups'];
@@ -890,133 +764,101 @@ function chartFactory(typeOfChart,data,DOMElement)
 				 
 				 sample.push(data_object_small_group);
 		 }
-		 
 		 		 
-var pie = new d3pie(DOMElement, {
-	"header": {
-		"title": {
-			"text": "Sample Data RCSB PDB",
-			"fontSize": 0,
-			"font": "Roboto"
-		},
-		"subtitle": {
-			"text": "This is sample data from rcsb pdb",
-			"color": "#999999",
-			"fontSize": 0,
-			"font": "Roboto"
-		},
-		"titleSubtitlePadding": 12
-	},
-	"footer": {
-		"text": "Source: RCSB PDB",
-		"color": "#999999",
-		"fontSize": 0,
-		"font": "Roboto",
-		"location": "bottom-center"
-	},
-	"size": {
-		"canvasHeight": 600,
-		"canvasWidth": 600,
-		"pieOuterRadius": "80%"
-	},
-	
-	/*"data": {
-		"content": [
-			{
-				"label": "Data 1",
-				"value": 8,
-				"color": "#7e3838"
+		var pie = new d3pie(DOMElement, {
+			"header": {
+				"title": {
+					"text": "Sample Data RCSB PDB",
+					"fontSize": 0,
+					"font": "Roboto"
+				},
+				"subtitle": {
+					"text": "This is sample data from rcsb pdb",
+					"color": "#999999",
+					"fontSize": 0,
+					"font": "Roboto"
+				},
+				"titleSubtitlePadding": 12
 			},
-			{
-				"label": "Data 2",
-				"value": 5,
-				"color": "#7e6538"
+			"footer": {
+				"text": "Source: RCSB PDB",
+				"color": "#999999",
+				"fontSize": 0,
+				"font": "Roboto",
+				"location": "bottom-center"
 			},
-			{
-				"label": "Data 3",
-				"value": 2,
-				"color": "#7c7e38"
+			"size": {
+				"canvasHeight": 600,
+				"canvasWidth": 600,
+				"pieOuterRadius": "80%"
 			},
+			"data": 
 			{
-				"label": "Data 4",
-				"value": 3,
-				"color": "#587e38"
+				//label, value, color
+				"content": sample
+			},
+			"labels": {
+				"outer": {
+					"format": "label-percentage",
+					"pieDistance": 0
+				},
+				"inner": {
+					"format": "value",
+					
+					"hideWhenLessThanPercentage": 3
+				},
+				"mainLabel": {
+					"font": "Roboto"
+				},
+				"percentage": {
+					"color": "#111111",
+					"font": "Roboto",
+					"decimalPlaces": 0
+				},
+				"value": {
+					"color": "#FFFFFF",
+					"font": "Roboto",
+					"fontSize": 15,
+				},
+				"lines": {
+					"enabled": true,
+					"color": "#cccccc"
+				},
+				"truncation": {
+					"enabled": true
+				}
+			},
+			"effects": {
+				"pullOutSegmentOnClick": {
+					"effect": "linear",
+					"speed": 400,
+					"size": 8
+				},
+				"load": {
+					"speed": 300
+				}
+				/*"load": {
+					"effect": "none"
+				}*/
+			},
+			"callbacks": {
+				onMouseoverSegment: function(info) {
+					$(mouseHoverChartButton).html( info["data"]["label"] + " (" + info["data"]["percentage"] + "%)" );
+					
+					$('#mouseHoverChartButton').css({
+						"background-color": info["data"]["color"],
+						"opacity": "100"
+					});
+				},
+				onMouseoutSegment: function(info) {
+					$('#mouseHoverChartButton').css({
+						"opacity": "0"
+					});
+				}
 			}
-		]
-	},*/
-	
-	"data": 
-	{
-		//label, value, color
-		"content": sample
-	},
-	
-	"labels": {
-		"outer": {
-			"format": "label-percentage",
-			"pieDistance": 0
-		},
-		"inner": {
-			"format": "value",
-			
-			"hideWhenLessThanPercentage": 3
-		},
-		"mainLabel": {
-			"font": "Roboto"
-		},
-		"percentage": {
-			"color": "#111111",
-			"font": "Roboto",
-			"decimalPlaces": 0
-		},
-		"value": {
-			"color": "#FFFFFF",
-			"font": "Roboto",
-			"fontSize": 15,
-		},
-		"lines": {
-			"enabled": true,
-			"color": "#cccccc"
-		},
-		"truncation": {
-			"enabled": true
+		});
+			}
 		}
-	},
-	"effects": {
-		"pullOutSegmentOnClick": {
-			"effect": "linear",
-			"speed": 400,
-			"size": 8
-		},
-		"load": {
-			"speed": 300
-		}
-		/*"load": {
-			"effect": "none"
-		}*/
-	},
-	"callbacks": {
-		onMouseoverSegment: function(info) {
-			//console.log("mouseover:", info);
-			
-			$(mouseHoverChartButton).html( info["data"]["label"] + " (" + info["data"]["percentage"] + "%)" );
-			
-			$('#mouseHoverChartButton').css({
-				"background-color": info["data"]["color"],
-				"opacity": "100"
-			});
-		},
-		onMouseoutSegment: function(info) {
-			//console.log("mouseout:", info);
-						
-			$('#mouseHoverChartButton').css({
-				"opacity": "0"
-			});
-		}
-	}
-});
-	}
-}
 
 $(document).bind('mousemove', function(e){
     $('#mouseHoverChartButton').css({
@@ -1028,15 +870,14 @@ $(document).bind('mousemove', function(e){
 
 function onChartChange(id)
 {
-	
 	chart_name[id.slice(-1)] = document.getElementById("chart_select"+id.slice(-1)).value;
 	// Store
 	localStorage.setItem("chart_select"+id.slice(-1), chart_name[id.slice(-1)]);
 	
 	//the + id.slice(-1) is the dynamcially generated "index" of the created chart, for interal use and bookkeeping only.
-	
+	 
 	while(document.getElementById("chartContainer" + id.slice(-1) ).children.length > 0)
-	{
+	{ 
 		document.getElementById("chartContainer" + id.slice(-1)).removeChild(document.getElementById("chartContainer" + id.slice(-1)).children[0]);           // Remove <ul>'s first child node (index 0)
 	}
 	
@@ -1055,3 +896,15 @@ function setChartChange(id)
 	localStorage.setItem(id, chart_name[id.slice(-1)]);
 }
 
+document.addEventListener('DOMContentLoaded', function(e)
+//window.onload = function () 
+{
+	request({url: "./json/config.json"})
+    .then(data => {
+        config = JSON.parse(data);
+		loadChartData();
+    })
+    .catch(error => {
+        console.log(error);
+    });
+});

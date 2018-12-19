@@ -19,6 +19,13 @@ body div[id^='gridContainer']
    flex-basis: 100%;
 }
 
+body svg[id^='chartContainer']
+{
+  width: 55em;
+  height: 55em;
+  margin: auto;
+  background-color: #FFFFFF;
+}
 
 body div[id^='wholeChartContaner']
 {
@@ -29,27 +36,11 @@ body div[id^='wholeChartContaner']
    text-align: center;
    flex-basis: 100%;
 }
-
-/*start bar chart vertical*/
-
-body div[id^='chartContainer']
-{
-  width: 55em;
-  height: 55em;
-  margin: auto;
-  background-color: #FFFFFF;
-}
-
+ 
 svg
 {
 	font-family: 'Roboto', sans-serif;
-}
-
-
-/*.bar {
-  fill: #80cbc4;
-}*/
-
+} 
 path {
   stroke: gray;
 }
@@ -124,17 +115,3 @@ body select[id^='chart_select']
    align-items: center;
 	
 }
-
-/*end bar chart vertical */
-
-/*for bar chart horizontal, jsut rotate the axis 90 degrees*/
-
-/*
-#barChartVertical
-{	
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  transform: rotate(90deg);
-}*/
