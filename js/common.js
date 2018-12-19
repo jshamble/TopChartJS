@@ -5,7 +5,34 @@ var params =
 	textSize : 1.5
 };
 
-function getFileOrDirectoryFromServer(url, doneCallback)
+window.onload = function () 
+{
+	request({url: "./json/config.json"})
+    .then(data => {
+        config = JSON.parse(data);
+		loadChartData();
+    })
+    .catch(error => {
+        console.log(error);
+    });
+	
+	/*
+	getFileOrDirectoryFromServer("./json/config.json", function(file_and_dir_names) 
+		{
+			if (typeof file_and_dir_names !== 'undefined') 
+			{
+				console.log("An error occured, file could not be read in function createDataArrays(). Please Email the Developer about this issue");
+			}
+			else 
+			{
+				config = file_and_dir_names;
+				loadChartData();
+			}
+		}); */
+}
+
+/*
+async function getFileOrDirectoryFromServer(url, doneCallback)
 {
    var promiseObj = new Promise(function(resolve, reject)
    {
@@ -29,8 +56,30 @@ function getFileOrDirectoryFromServer(url, doneCallback)
    }
    console.log("request sent succesfully");
    });
- return promiseObj;
-}
+   return promiseObj;
+   //resolve promise vs.
+}*/
+
+let request = obj => {
+    return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open(obj.method || "GET", obj.url);
+        if (obj.headers) {
+            Object.keys(obj.headers).forEach(key => {
+                xhr.setRequestHeader(key, obj.headers[key]);
+            });
+        }
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                resolve(xhr.response);
+            } else {
+                reject(xhr.statusText);
+            }
+        };
+        xhr.onerror = () => reject(xhr.statusText);
+        xhr.send(obj.body);
+    });
+};
 
 function getRandIntRange(min, max) 
 		{
@@ -83,48 +132,6 @@ var colors =  [
 "#f812b3", "#b17fc9", "#8d6c2f", "#d3277a", "#2ca1ae", "#9685eb", "#8a96c6",
 "#dba2e6", "#76fc1b", "#608fa4", "#20f6ba", "#07d7f6", "#dce77a", "#77ecca"]
 
-//map_DATA_to_JSON[entry_name] = JSON.parse(data);
-
-
-
-
-	//first, dynamiclly load the file with an ajax call:
-	
-        // example request, not the full one yet.
-        //data is fetched, no need to display it on the screen using the ""
-		
-		//TODO: Loop through URLs. Make sure that it is stored in a format that can be looped through.
-		
-		
-		/*
-			PIE CHARTS
-		
-			http://search-phase2-staging.rcsb.org/explore.html#stats
-			
-			Statistics Examples
-			PDB Data Distribution
-			Resolution histogram: /rcsbsearch/v1/statistics/entry/resolution
-
-			Release Date: /rcsbsearch/v1/statistics/entry/release_date
-
-			Experimental Method: /rcsbsearch/v1/statistics/entry/f_method
-
-			by Experimental Method and Polymer Type: /rcsbsearch/v1/browse/holdings
-
-
-			BAR CHARTS, HORIZONTAL IF TOO MANY NAMES
-			
-			Growth of Released Structures Per Year
-			Overall: /rcsbsearch/v1/statistics/entry/growth
-
-			By X-ray: /rcsbsearch/v1/statistics/entry/growth?fq=method:"X-RAY DIFFRACTION"
-
-			By NMR: /rcsbsearch/v1/statistics/entry/growth?fq=method:"*nmr"
-
-			By Electron Microscopy: /rcsbsearch/v1/statistics/entry/growth?fq=method:"electron microscopy"
-
-		*/
-
 var chart_name = {};
 
 var last_known_entry_name = "";
@@ -138,161 +145,128 @@ var chart_type = ["pie","bar horizontal","bar vertical"];
 function loadChartData()
 {
 	//for each html node
-	for(var k = 0; k < config["HTMLNodes"].length; k++)
+	for(let k = 0; k < config["HTMLNodes"].length; k++)
 	{
 		//for each child in the html node
-		for(var i = 0; i < config["HTMLNodes"][k]["children"].length; i++)
+		//let i = 0;.
+		
+		for(let i = 0; i < config["HTMLNodes"][k]["children"].length; i++)
 		{
 			
 			//1)<div class="boxContentContainer + 'i'"> </div>
 			
 			var childChartNode = document.createElement('div');
-			childChartNode.className = "boxContentContainer" + i;
+			childChartNode.id = "boxContentContainer" + i;
 			var gridContainer = document.createElement('div');
-			gridContainer.className = "gridContainer" + i;
+			gridContainer.id = "gridContainer" + i;
 			
 			var chartContainer = document.createElement('svg');
-			chartContainer.className = "chartContainer" + i;
+			chartContainer.id = "chartContainer" + i;
 			chartContainer.viewBox =  config["HTMLNodes"][k]["children"]["viewBox"];
 			
 			var pieChartDataColumn = document.createElement('div');
-			pieChartDataColumn.className = "pieChartDataColumn" + i;
+			pieChartDataColumn.id = "pChartDataColumn" + i;
 			
-						//console.log(config["HTMLNodes"][i]["DOM_name"]);
-						
-						/* follow this html dom node format:
-						
-							
-					
-					FORMAT OF EACH CHILD ATTACHED TO AN HTML DOM NODE ("BUILDING BLOCKS"):
-					
-					1) DONE <div class="boxContentContainer + 'i'">
-					
-						2)<div class="gridContainer + 'i'">
-						3)	<svg id="chartContainer + 'i'" viewBox='0 0 650 500'/>
-						4)	<div id="pieChartDataColumn + 'i'"></div>
-						  </div>
-							
-						5) DONE  <select onchange="onChartChange(id)" class="chart_button_select + 'i'" id="chart_select + 'i'" > </select>
-							
-					</div>
-					
-					
-					*/
-					
-					var chart_select = document.createElement('div');
-					chart_select.id = 'chart_select'+i;
-					chart_select.className = 'chart_button_select'+i;
-					
-					//alert(chart_select.className);
-					
-					$('.chart_button_select'+i).empty();
-					$.each(chart_type, function(i, p) {
-						$('.chart_button_select'+i).append($('<option></option>').val(p).html(p));
-					});
-					
-					//create then append element to appropriate id.
-					
-					
-					//var URL = 'http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/entry/resolution';
+			var chart_select = document.createElement('div');
+			
+			//https://stackoverflow.com/questions/6318385/javascript-dynamic-onchange-event
+			chart_select.onchange ="onChartChange(this.id)";
+			
+			chart_select.id = 'chart_select'+i;
+			chart_select.className = 'chart_button_select'+i;
+			
+			
+			var URL = config["HTMLNodes"][k]["children"][i]["properties"]["data_url"];
 					 
-					 //console.log(config["HTMLNodes"][k]["children"][i]["children"].length);
-					 
-					var URL = config["HTMLNodes"][k]["children"][i]["properties"]["data_url"];
-					 
-					var split_URL = URL.split('/');
+			var split_URL = URL.split('/');
 					
-					//alert(config["HTMLNodes"][k]["children"][i]["properties"]["data_url"]);
-						
-					last_known_entry_name = split_URL[split_URL.length-1];
+			last_known_entry_name = split_URL[split_URL.length-1];
 					
+			gridContainer.appendChild(chartContainer);
+			gridContainer.appendChild(pieChartDataColumn);
 					
-					gridContainer.appendChild(chartContainer);
-					gridContainer.appendChild(pieChartDataColumn);
-					
-					childChartNode.appendChild(gridContainer);
-					childChartNode.appendChild(chart_select);
-						
-					//append each child to the html node here. (will match find either by id or class name)
-					
-					if(document.getElementById(config["HTMLNodes"]["DOM_name"]) != null)
-					{
-						document.getElementById(config["HTMLNodes"]["DOM_name"]).appendChild(childChartNode);
-					}
-					else if(document.getElementsByClassName(config["HTMLNodes"]["DOM_name"])[0] != null)
-					{
-						for(var j = 0; j < document.getElementsByClassName.length; j++)
-						{
-							document.getElementsByClassName(config["HTMLNodes"]["DOM_name"])[j].appendChild(childChartNode);	
-						}
-					}
-						
-					getFileOrDirectoryFromServer(URL, function(file_and_dir_names) 
-					{
-						if (file_and_dir_names == null) 
-						{
-							alert("An error occured, file could not be read in function createDataArrays(). Please Email the Developer about this issue");
-						}
-						else 
-						{
-							
-							//just sent to chartFactory, and call chart factory again.
-							
-							//Todo: First, remove all children first, then add the new chart.
+			childChartNode.appendChild(gridContainer);
+			childChartNode.appendChild(chart_select);
+			
+			$('.chart_button_select'+i).empty();
+			$.each(chart_type, function(z, p) {
+				$('.chart_button_select'+i).append($('<option></option>').val(p).html(p));
+			});
 				
-							if(localStorage.getItem("chart_select"+i) != null)
-							{
-								// Retrieve local storage
-								chart_name[i] = localStorage.getItem("chart_select"+i);
-							}
-							else
-							{
-								chart_name[i] = "pie";
-							}
-							
-							
-							//TODO FIX THIS.
-							setChartChange('chart_select'+i);
-							
-							//alert(document.getElementById("chart_select").value);
-							
-							if(last_known_entry_name == "resolution")
-							{
-								map_DATA_to_JSON["resolution"] = file_and_dir_names;//JSON.parse(file_and_dir_names);
-								//chartFactory("bar horizontal",map_DATA_to_JSON[entry_name],document.getElementById("chartContainer"+i) );
-								//chartFactory("bar vertical",map_DATA_to_JSON[entry_name],document.getElementById("chartContainer"+i) );
-								chartFactory(chart_name[i],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+i) );
-								
-								//to add: if the cahrt is a pie...
-							}
+			if(document.getElementById(config["HTMLNodes"][k]["DOM_name"]) != null)
+			{
+				document.getElementById(config["HTMLNodes"][k]["DOM_name"]).appendChild(childChartNode);
+			}
+			else if(document.getElementsByClassName(config["HTMLNodes"][k]["DOM_name"])[0] != null)
+			{
+				for(var j = 0; j < document.getElementsByClassName.length; j++)
+				{
+					document.getElementsByClassName(config["HTMLNodes"][k]["DOM_name"])[j].appendChild(childChartNode);	
+				}
+			}
+			
+				request({url: URL})
+				.then(data => {
+						if(localStorage.getItem("chart_select"+i) != null)
+						{
+							chart_name[i] = localStorage.getItem("chart_select"+i);
 						}
-					});
+						else
+						{
+							chart_name[i] = "pie";
+						}
 						
-					//5) <select onchange="onChartChange(id)" class="chart_button_select + 'i'" id="chart_select + 'i'" ></select>
+						setChartChange('chart_select'+i);
+								
+						if(last_known_entry_name == "resolution")
+						{
+							map_DATA_to_JSON["resolution"] = JSON.parse(data);//JSON.parse(file_and_dir_names);
+							//chartFactory("bar horizontal",map_DATA_to_JSON[entry_name],document.getElementById("chartContainer"+i) );
+							//chartFactory("bar vertical",map_DATA_to_JSON[entry_name],document.getElementById("chartContainer"+i) );
+							chartFactory(chart_name[i],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+i));
+									
+						}
 					
+					
+				})
+				.catch(error => {
+					console.log(error);
+				});
+							
+			/*getFileOrDirectoryFromServer(URL, function(file_and_dir_names) 
+			{
+				if (typeof file_and_dir_names !== 'undefined') 
+				{
+					console.log("An error occured, file could not be read in function createDataArrays(). Please Email the Developer about this issue");
+				}
+				else 
+				{			
+					if(localStorage.getItem("chart_select"+i) != null)
+					{
+						chart_name[i] = localStorage.getItem("chart_select"+i);
+					}
+					else
+					{
+						chart_name[i] = "pie";
+					}
+					
+					setChartChange('chart_select'+i);
+							
+					if(last_known_entry_name == "resolution")
+					{
+						map_DATA_to_JSON["resolution"] = file_and_dir_names;//JSON.parse(file_and_dir_names);
+						//chartFactory("bar horizontal",map_DATA_to_JSON[entry_name],document.getElementById("chartContainer"+i) );
+						//chartFactory("bar vertical",map_DATA_to_JSON[entry_name],document.getElementById("chartContainer"+i) );
+						chartFactory(chart_name[i],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+i) );
+								
+					}
+				}
+			});*/
 		}
 		
 		
 	}
 	
-}
-
-window.onload = function () 
-{
-	//Load Config JSON File
-	getFileOrDirectoryFromServer("./json/config.json", function(file_and_dir_names) 
-		{
-			if (file_and_dir_names == null) 
-			{
-				alert("An error occured, file could not be read in function createDataArrays(). Please Email the Developer about this issue");
-			}
-			else 
-			{
-				config = file_and_dir_names;
-				//load chart data afterwards.
-				loadChartData();
-			}
-		}); 
 }
 
 function chartFactory(typeOfChart,data,DOMElement)
@@ -832,13 +806,14 @@ function chartFactory(typeOfChart,data,DOMElement)
 				 data_object.color = colors[getRandIntRange(0,colors.length-1)];
 				 
 				 var pieChartDataCol = document.createElement("p");
-				 pieChartDataCol.className = "PieChart";
+				 pieChartDataCol.id = "PieChart" + DOMElement.id.slice(-1);
 				 pieChartDataCol.style.opacity = "100";
 				 pieChartDataCol.style["background-color"] = data_object.color;
 				 pieChartDataCol.innerHTML = data_object.label + " " + "(" + data_object.value + ")";
 				 
 				 //since the chart is a pie, add to the DOM element the piechart DATA: pieChartData
-				 document.getElementById("pieChartDataColumn").append(pieChartDataCol);
+				 
+				 document.getElementById("pChartDataColumn" + DOMElement.id.slice(-1)).append(pieChartDataCol);
 				 
 				 //data_object.color = colors[i % colors.length -1];
 				 max_range = Math.max(max_range,groups[i].population);
@@ -882,13 +857,13 @@ function chartFactory(typeOfChart,data,DOMElement)
 		 if(Object.keys(data_object_small_group).length !== 0)
 		 {
 				 var pieChartDataCol = document.createElement("p");
-				 pieChartDataCol.className = "PieChart";
+				 pieChartDataCol.id = "PieChart" + DOMElement.id.slice(-1);
 				 pieChartDataCol.style.opacity = "100";
 				 pieChartDataCol.style["background-color"] = data_object_small_group.color;
 				 pieChartDataCol.innerHTML = data_object_small_group.label + " " + "(" + data_object_small_group.value + ")";
 				 
 				 //since the chart is a pie, add to the DOM element the piechart DATA: pieChartData
-				 document.getElementById("pieChartDataColumn").append(pieChartDataCol);
+				 document.getElementById("pChartDataColumn" + DOMElement.id.slice(-1)).append(pieChartDataCol);
 				 
 				 sample.push(data_object_small_group);
 		 }
@@ -1030,32 +1005,30 @@ $(document).bind('mousemove', function(e){
 
 function onChartChange(id)
 {
-	chart_name[id.slice(-1)] = document.getElementById("chart_select").value;
+	
+	chart_name[id.slice(-1)] = document.getElementById("chart_select"+id.slice(-1)).value;
 	// Store
-	localStorage.setItem("chart_select", chart_name);
+	localStorage.setItem("chart_select"+id.slice(-1), chart_name[id.slice(-1)]);
 	
 	//the + id.slice(-1) is the dynamcially generated "index" of the created chart, for interal use and bookkeeping only.
 	
 	while(document.getElementById("chartContainer" + id.slice(-1) ).children.length > 0)
 	{
-		document.getElementById("chartContainer" + id.slice(-1)).removeChild(document.getElementById("chartContainer").children[0]);           // Remove <ul>'s first child node (index 0)
+		document.getElementById("chartContainer" + id.slice(-1)).removeChild(document.getElementById("chartContainer" + id.slice(-1)).children[0]);           // Remove <ul>'s first child node (index 0)
 	}
 	
-	while(document.getElementById("pieChartDataColumn"+ id.slice(-1)).children.length > 0)
+	while(document.getElementById("pChartDataColumn"+ id.slice(-1)).children.length > 0)
 	{
-		document.getElementById("pieChartDataColumn"+ id.slice(-1)).removeChild(document.getElementById("pieChartDataColumn"+ id.slice(-1)).children[0]);           // Remove <ul>'s first child node (index 0)
+		document.getElementById("pChartDataColumn"+ id.slice(-1)).removeChild(document.getElementById("pChartDataColumn"+ id.slice(-1)).children[0]);           // Remove <ul>'s first child node (index 0)
 	}
 	
-	chartFactory(chart_name,map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+ id.slice(-1)) );
+	chartFactory(chart_name[id.slice(-1)],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+ id.slice(-1)) );
 }
 
 function setChartChange(id)
 {
-	alert(id);
-	alert(document.getElementById(id));
+	//chart_select0 
 	document.getElementById(id).value = chart_name[id.slice(-1)];
 	localStorage.setItem(id, chart_name[id.slice(-1)]);
 }
-
-
 

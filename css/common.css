@@ -1,7 +1,4 @@
-
-
 @import url('https://fonts.googleapis.com/css?family=Roboto');
-
 @import url('https://fonts.googleapis.com/css?family=Monda');
 
 html, body {
@@ -13,7 +10,7 @@ html, body {
     overflow-y: hidden;
 }
 
-.gridContainer
+body div[id^='gridContainer']
 {
    display: flex;
    flex-direction: row;
@@ -21,7 +18,9 @@ html, body {
    align-items: center;
    flex-basis: 100%;
 }
-#wholeChartContaner1
+
+
+body div[id^='wholeChartContaner']
 {
    display: flex;
    flex-direction: column;
@@ -33,7 +32,8 @@ html, body {
 
 /*start bar chart vertical*/
 
-#chartContainer {
+body div[id^='chartContainer']
+{
   width: 55em;
   height: 55em;
   margin: auto;
@@ -64,6 +64,48 @@ line#limit {
   stroke-dasharray: 3 6;
 }
 
+body p[id^='PieChart'] 
+{
+    background-color: black; 
+    color: white; 
+    border: 2px solid black;
+	font-size: 1em;
+	text-align: center;
+	font-family: 'Monda', sans-serif;
+	border-radius: 25px;
+	position: relative;
+    padding: 0px 10px;
+	opacity: 0;
+	transition: opacity, background 0.25s 0.25s ease;
+	-webkit-transition: opacity 0.25s, background 0.25s ease;
+	
+}
+
+/*css regex match*/
+body div[id^='pChartDataColumn']
+{
+    height: 30em;
+    width: 10em;
+    overflow-y: auto;
+}
+
+body div[id^='chart_select']
+{	
+    font-weight: bold;	
+    background-color: white; 
+    color: black; 
+    border: 2px solid black;
+	font-size: 1em;
+	text-align: center;
+	font-family: 'Monda', sans-serif;
+	border-radius: 25px;
+	position: relative;
+    padding: 0px 10px;
+	opacity: 100;
+	transition: opacity, background 0.25s 0.25s ease;
+	-webkit-transition: opacity 0.25s, background 0.25s ease;
+	height: 20px;
+}
 
 
 .mouseHoverChart {
@@ -79,58 +121,12 @@ line#limit {
 	transition: opacity, background 0.25s 0.25s ease;
 	-webkit-transition: opacity 0.25s, background 0.25s ease;
 	display: flex;
-	
    justify-content: center;
    align-items: center;
 	
 }
 
-
-.PieChart {
-    background-color: black; 
-    color: white; 
-    border: 2px solid black;
-	font-size: 1em;
-	text-align: center;
-	font-family: 'Monda', sans-serif;
-	border-radius: 25px;
-	position: relative;
-    padding: 0px 10px;
-	opacity: 0;
-	transition: opacity, background 0.25s 0.25s ease;
-	-webkit-transition: opacity 0.25s, background 0.25s ease;
-	
-}
- 
-
-
-#chart_select{	
-	font-size: 18px;
-	font-family: 'Dosis', sans-serif;
-    font-weight: bold;	
-    background-color: white; 
-    color: black; 
-    border: 2px solid black;
-	font-size: 1em;
-	text-align: center;
-	font-family: 'Monda', sans-serif;
-	border-radius: 25px;
-	position: relative;
-    padding: 0px 10px;
-	opacity: 100;
-	transition: opacity, background 0.25s 0.25s ease;
-	-webkit-transition: opacity 0.25s, background 0.25s ease;
-}
-
-#pieChartDataColumn
-{
-    height: 30em;
-    width: 10em;
-    overflow-y: auto;
-}
-
-
-/*end bar chart vertical*/
+/*end bar chart vertical */
 
 /*for bar chart horizontal, jsut rotate the axis 90 degrees*/
 
