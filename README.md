@@ -21,15 +21,21 @@ http://htmlpreview.github.io/?https://github.com/rcsb/TopChartJS/blob/master/ind
 
 ## Usage
 
-Include css/common.css and all javascript files the js folder.
+### Includes (See examples/basic to retrieve files)
+
+-TopChartJS.css 
+-jquery.min.js
+-d3.min.js
+-d3pie.min.js
+-TopChartJS.js
 
 Modify the configuration JSON file located in json/config.json with the target html id or class nodes in the DOM.
 Then specify the parameters specifically for each target.
 
-The config.json file will be populated with a sample subset of all of the features.
+The config.json file will be populated with a sample subset of all of the features/parameters that you can modify.
 The complete list of features per chart and their function will be listed in the features below.
 
-See the demo html file for an example template.
+See the demo html file in the exampels folder for an example template.
 
 http://htmlpreview.github.io/?https://github.com/rcsb/TopChartJS/blob/master/index.html
 
