@@ -1,28 +1,33 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 @import url('https://fonts.googleapis.com/css?family=Monda');
 
-html, body {
-    height:100%;
-    flex-direction: row;
-    display: flex;
-	flex-basis: 100%;
-    overflow-x: hidden;
-    overflow-y: hidden;
+html, body 
+{
+  height:100%;
+  flex-direction: row;
+  display: flex;
+  flex-basis: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 body div[id^='gridContainer']
 {
-   display: flex;
-   flex-direction: row;
-   justify-content: center;
-   align-items: center;
-   flex-basis: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 body svg[id^='chartContainer']
 {
-  width: 55em;
-  height: 55em;
+  max-width: 100%;
+  max-height: 100%;
   margin: auto;
   background-color: #FFFFFF;
 }
@@ -35,6 +40,10 @@ body div[id^='wholeChartContaner']
    align-items: center;
    text-align: center;
    flex-basis: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
 }
  
 svg
@@ -75,8 +84,6 @@ body p[id^='PieChart']
 /*css regex match*/
 body div[id^='pChartDataColumn']
 {
-    height: 30em;
-    width: 10em;
     overflow-y: auto;
 }
 

@@ -7,16 +7,22 @@
 			{ 
 				"properties": 
 				{
-					"dom_type": "id",
 					"data_url": "http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/entry/resolution",
-					"color": "rand",
+					"color_palette": "modern",
 					"chart_type": "pie",
-					"viewBox": "0 0 750 500",
-					"css":[{"font":"Roboto","font_color":"#FFFFFF"}],
+					"viewBox": "0 0 500 500",
+					"width": "2000px",
+					"height": "1000px",
 					"filter":"*",
 					"axis_labels":
 					[
-						{"position":[0,0],"css":[{"font":"Roboto","font_color":"#FFFFFF"}]}
+						{
+						 "position":[0,0],
+						 "rotation":[0,0],
+						 "scale":[1.1,1.1],
+						 "radius-offset":[1.6],
+						 "css":[{"font-family":"Roboto","font-color":"#FFFFFF"}]
+						}
 					]
 				}
 			} 
