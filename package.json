@@ -1,0 +1,58 @@
+{
+  "name": "topchartjs",
+  "version": "1.0.0",
+  "description": "An extension of d3 for dynamic editable charting.",
+  "main": "./lib/index.js",
+  "scripts": {
+    "clean": "rimraf lib",
+    "test": "npm run lint",
+    "test:prod": "cross-env BABEL_ENV=production npm run test",
+    "test:only": "mocha --require babel-core/register --require babel-polyfill --recursive",
+    "test:watch": "npm test -- --watch",
+    "test:examples": "node examples/",
+    "lint": "eslint src test",
+    "build": "cross-env BABEL_ENV=production babel src --out-dir lib",
+    "prepublish": "npm run clean && npm run lint && npm run test && npm run build"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jshamble/TopChartJS.git"
+  },
+  "keywords": [
+    "chart",
+    "d3",
+    "pie"
+  ],
+  "author": "Jonathan Shamblen <jshamble.js@gmail.com>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/jshamble/TopChartJS"
+  },
+  "homepage": "https://github.com/jshamble/TopChartJS",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.6",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-minify": "^0.3.0",
+    "chai": "^4.1.2",
+    "cross-env": "^5.2.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.12.3",
+    "mocha": "^5.2.0",
+    "rimraf": "^2.6.2"
+  },
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "dependencies": {}
+}

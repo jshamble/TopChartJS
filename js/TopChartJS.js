@@ -21,6 +21,60 @@ let request = obj => {
     });
 };
 
+
+function wrap_text_vert(text, width) {
+  text.each(function() {
+    var text = d3.select(this),
+        words = text.text().split(/,+/).reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 1.0, // ems
+        y = text.attr("y"),
+        dy = 1.0,//parseFloat(text.attr("dy")),
+        tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+	  
+      //if (tspan.node().getComputedTextLength() > width) 
+	  {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber *lineHeight  + dy + "em").text(word);
+      }
+    }
+  });
+}
+
+
+function wrap_text_horiz(text, width) {
+  text.each(function() {
+    var text = d3.select(this),
+        words = text.text().split(/,+/).reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 0.0, // ems
+        y = text.attr("y"),
+        dy = 1.0,//parseFloat(text.attr("dy")),
+        tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      //if (tspan.node().getComputedTextLength() > width) 
+	  {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber *lineHeight  + dy + "em").text(word);
+      }
+    }
+  });
+}
+
+
 function getRandIntRange(min, max) 
 {
   min = Math.ceil(min);
@@ -271,11 +325,11 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 			{
 				if(data_object_small_group.label == null )
 				{
-				  data_object_small_group.label = "Less Than " + percentCutoff + "% " + groups[i].label;
+				  data_object_small_group.label = "Less Than " + percentCutoff + "% ," + groups[i].label;
 				}
 				else
 				{
-				  data_object_small_group.label += "," + groups[i].label;
+				  data_object_small_group.label += ", " + groups[i].label;
 				}
 				
 				
@@ -323,16 +377,15 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		 }
 		  
 	
-	if(typeOfChart == 'bar vertical')
-	{ 
 		
 		const svg = d3.select('svg');
 		const svgContainer = d3.select('#chartContainer'+DOMElement.id.slice(-1)   );
 		
-		
-		const width = viewBox_props[2] - 2 * margin;
-		const height = viewBox_props[3] - 2 * margin;
+		let width = viewBox_props[2] - 2 * margin;
+		let height = viewBox_props[3] - 2 * margin;
 
+	if(typeOfChart == 'bar vertical')
+	{ 
 		const chart = svg.append('g')
 		  .attr('transform', `translate(${offset}, ${offset})`);
 
@@ -343,7 +396,7 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		
 		const yScale = d3.scaleLinear()
 		  .range([height, 0])
-		  .domain([0, max_range]); 
+		  .domain([0, max_range]);
 
 		const makeYLines = () => d3.axisLeft()
 		  .scale(yScale)
@@ -352,6 +405,8 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		chart.append('g')
 		  .call(d3.axisBottom(xScale))
 			  .attr('transform', 'translate(0,'+height*config_main["axis_labels"][0]["scale"][0]+')'+'scale('+config_main["axis_labels"][0]["scale"][0]+')')
+		.selectAll(".tick:last-of-type text") // last child selector.
+		  .call(wrap_text_vert, width); // d3.scaleBand().rangeRound([width])
 
 		chart.append('g')
 		  .call(d3.axisLeft(yScale))
@@ -439,41 +494,11 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		  .text((a) => a.value)
 		  .attr('transform', 'scale('+config_main["axis_labels"][0]["scale"][0]+')');
 		
-		svg
-		  .append('text')
-		  .attr('class', 'label')
-		  .attr('x', -(height / 2) - margin)
-		  .attr('y', margin / 2.4)
-		  .attr('transform', 'rotate(-90)')
-		  .attr('text-anchor', 'middle')
-		  .text('(%)')
-
-		svg.append('text')
-		  .attr('class', 'label')
-		  .attr('x', width / 2 + margin)
-		  .attr('y', height + margin * 1.7)
-		  .attr('text-anchor', 'middle')
-		  .text(data['drilldowns'][0]['categories'][0]["field_name"] + ' data')
-		  
-		svg.append('text')
-		  .attr('class', 'source')
-		  .attr('x', width - margin / 2)
-		  .attr('y', height + margin * 1.7)
-		  .attr('text-anchor', 'start')
-		  .text('Source: RSCB PDB Archive, 2018')
-		  
 		
 	
 	}
 	else if(typeOfChart == 'bar horizontal')
 	{
-		//console.log(data);
-		const svg = d3.select('svg');
-		const svgContainer = d3.select('#chartContainer'+DOMElement.id.slice(-1)   );
-		
-		const width = viewBox_props[2] - 2 * margin;
-		const height = viewBox_props[3] - 2 * margin;
-
 		const chart = svg.append('g').attr('transform', `translate(${offset}, ${offset})`);
 
 		//todo: two of them.
@@ -496,7 +521,9 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		chart.append('g')
 		  .attr('transform', `translate(0,-0)`)
 		  .attr('transform', `scale(` + config_main["axis_labels"][0]["scale"][0] + `)`)
-		  .call(d3.axisLeft(xScale));
+		  .call(d3.axisLeft(xScale))
+		.selectAll(".tick:last-of-type text") // last child selector.
+		  .call(wrap_text_horiz, width);
 		  
 
 		chart.append('g')
@@ -591,7 +618,33 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 			chart.selectAll('.divergence').remove()
 		  }); 
 		
-		svg
+		
+		/*svg
+		  .append('text')
+		  .attr('class', 'label')
+		  .attr('x', -(height / 2) - margin)
+		  .attr('y', margin / 2.4)
+		  .attr('transform', 'rotate(-90)')
+		  .attr('text-anchor', 'middle')
+		  .text('(%)')
+
+		svg.append('text')
+		  .attr('class', 'label')
+		  .attr('x', width / 2 + margin)
+		  .attr('y', height + margin * 1.7)
+		  .attr('text-anchor', 'middle')
+		  .text(data['drilldowns'][0]['categories'][0]["field_name"] + ' data')
+		  
+		svg.append('text')
+		  .attr('class', 'source')
+		  .attr('x', width - margin / 2)
+		  .attr('y', height + margin * 1.7)
+		  .attr('text-anchor', 'start')
+		  .text('Source: RSCB PDB Archive, 2018')*/
+		  
+		
+		
+		/*svg
 		  .append('text')
 		  .attr('class', 'label')
 		  .attr('x', -(height / 2) - margin)
@@ -610,19 +663,18 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		svg.append('text')
 		  .attr('class', 'source') 
 		  .attr('text-anchor', 'start')
-		  .text('Source: RSCB PDB Archive, 2018')
+		  .text('Source: RSCB PDB Archive, 2018')*/
 		
 	
 	}
 	else if(typeOfChart == 'pie')
 	{
+		 width = viewBox_props[2];
+		 height = viewBox_props[3];
 		 
-        const width = viewBox_props[2],
-        height = viewBox_props[3],
-        inner_radius = 0,
+        const inner_radius = 0,
         outer_radius = Math.min(width, height) / 2;
         
-		const svg = d3.select('svg');
 		//const svgContainer = d3.select('#chartContainer'+DOMElement.id.slice(-1)   );
  
 		let svgContainer = d3.select( '#chartContainer'+DOMElement.id.slice(-1)    ).append("svg:svg").data([sample]).attr("width", width).attr("height", height).append("svg:g").attr("transform", "translate(" + outer_radius + "," + outer_radius + ")");
@@ -787,3 +839,25 @@ document.addEventListener('DOMContentLoaded', function(e)
         console.log(error);
     });
 });
+
+function loadPageContent()
+{
+	request({url: "./json/config_color.json"})
+    .then(data_color => {
+		
+		request({url: "./json/config_main.json"})
+		.then(data => {
+			loadChartData(JSON.parse(data), JSON.parse(data_color) );
+		})
+		.catch(error => {
+			console.log(error);
+		});
+    })
+    .catch(error => {
+        console.log(error);
+    });
+};
+
+/*Copyright © Jonathan Shamblen 2019, AGPL v3 License
+  All rights reserved.
+*/
