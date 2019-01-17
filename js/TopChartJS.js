@@ -88,7 +88,19 @@ var last_known_entry_name = "";
 
 //append chart types here as nescessary
 var chart_type = ["pie","bar horizontal","bar vertical"];
+
+function getParentNodeIndex(nodes,nodeName)
+{
+	for(let i = 0; i < nodes.length; i++)
+	{
+		if(nodeName == nodes[i])
+		{
+				return i;
+		}
+	}
 	
+	return 0;
+}	
 
 function loadChartData(config_main,config_color)
 {
@@ -117,13 +129,21 @@ function loadChartData(config_main,config_color)
 			 
 		chart_select.id = 'chart_select'+k;
 		chart_select.className = 'chart_button_select'+k;
+		
+		
 			
 		//for(let i = 0; i < config_main["HTMLNodes"][k]["children"].length; i++)
 		{
+			if( config_main["HTMLNodes"][k]["parent"] != null)
+			{
+				config_main["HTMLNodes"][k]["properties"] = config_main["HTMLNodes"][ getParentNodeIndex(config_main["HTMLNodes"],config_main["HTMLNodes"][k]["parent"]) ]["properties"];
+			}
+			
 			chartContainer.setAttribute("viewBox", config_main["HTMLNodes"][k]["properties"]["viewBox"]);
 			chartContainer.setAttribute("preserveAspectRatio", "xMidYMid meet");
 			chartContainer.setAttribute("width",config_main["HTMLNodes"][k]["properties"]["width"]);
 			chartContainer.setAttribute("height",config_main["HTMLNodes"][k]["properties"]["height"]);
+			
 				
 			var URL_JSON = config_main["HTMLNodes"][k]["properties"]["data_url"];
 						 

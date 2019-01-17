@@ -5,7 +5,7 @@
 		"DOM_name": "wholeChartContainer0",
 		"properties":
 		{
-			"data_url": "http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/entry/resolution",
+			"data_url": "http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/s_entry/resolution",
 			"color_palette": "modern",
 			"chart_type": "pie",
 			"viewBox": "0 0 500 500",
@@ -34,7 +34,7 @@
 		"DOM_name": "wholeChartContainer1",
 		"properties": 
 		{
-			"data_url": "http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/entry/resolution",
+			"data_url": "http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/s_entry/resolution",
 			"color_palette": "modern",
 			"chart_type": "pie",
 			"viewBox": "0 0 500 500",
@@ -63,7 +63,7 @@
 		"DOM_name": "wholeChartContainer2",
 		"properties": 
 		{
-			"data_url": "http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/entry/resolution",
+			"data_url": "http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/s_entry/resolution",
 			"color_palette": "modern",
 			"chart_type": "pie",
 			"viewBox": "0 0 500 500",
@@ -90,31 +90,9 @@
     },
 	{
 		"DOM_name": "wholeChartContainer3",
+		"parent":"wholeChartContainer0",
 		"properties": 
 		{
-			"data_url": "http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/entry/resolution",
-			"color_palette": "modern",
-			"chart_type": "pie",
-			"viewBox": "0 0 500 500",
-			"width": "2000px",
-			"height": "1000px",
-			"filter":"*",
-			"radius-offset":[1.6],
-			"font-scale":[1.1,1.1],
-			"css":[{"font-family":"Roboto","font-color":"#FFFFFF"}],
-			"axis_labels":
-			[
-				{
-				 "text":"label test",
-				 "class":"label",
-				 "transform":"rotate(-90)",
-				 "x":"2",
-				 "y":"2.4",
-				 "text-anchor":"middle", 
-				 "font-family":"Roboto",
-				 "font-color":"#0000AA"
-				}
-			]
 		}
     }
   ]
