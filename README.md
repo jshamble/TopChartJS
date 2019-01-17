@@ -84,5 +84,3 @@ Sampel Images of different chart types:
 ### Bar (Vertical)
 
 ![alt text](https://github.com/jshamble/TopChartJS/blob/master/examples/basic/img/Vertical%20Bar.png)
-
-"I do not see an opportunity to gain significant experience and grow as a professional at $CURRENT_PLACE" should be enough.

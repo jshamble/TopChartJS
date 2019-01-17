@@ -24,6 +24,13 @@ body div[id^='gridContainer']
   height: 100%;
 }
 
+body div[id^='boxContentContainer']
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 body svg[id^='chartContainer']
 {
   max-width: 100%;
@@ -102,6 +109,8 @@ body select[id^='chart_select']
 	opacity: 100;
 	transition: opacity, background 0.25s 0.25s ease;
 	-webkit-transition: opacity 0.25s, background 0.25s ease;
+	
+	
 }
 
 
