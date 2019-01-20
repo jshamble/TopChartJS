@@ -91,3 +91,64 @@ Sampel Images of different chart types:
 ### Bar (Vertical)
 
 ![alt text](https://github.com/jshamble/TopChartJS/blob/master/examples/basic/img/Vertical%20Bar.png)
+
+### Example JSON File:
+
+{
+  "q" : "*:*",
+  "description" : "Search s_entry: *:*",
+  "results" : [ null ],
+  "drilldowns" : [ {
+    "ref_url" : "/rcsbsearch/v1/search/s_entry?q=*:*",
+    "categories" : [ {
+      "core" : "s_entry",
+      "display_name" : "X-ray Resolution",
+      "field_name" : "resolution",
+      "groups" : [ {
+        "label" : "<0.5",
+        "population" : 2,
+        "filter" : "[* TO 0.5}"
+      }, {
+        "label" : "0.5 - 1",
+        "population" : 641,
+        "filter" : "[0.5 TO 1}"
+      }, {
+        "label" : "1 - 1.5",
+        "population" : 11380,
+        "filter" : "[1 TO 1.5}"
+      }, {
+        "label" : "1.5 - 2",
+        "population" : 44867,
+        "filter" : "[1.5 TO 2}"
+      }, {
+        "label" : "2 - 2.5",
+        "population" : 42203,
+        "filter" : "[2 TO 2.5}"
+      }, {
+        "label" : "2.5 - 3",
+        "population" : 23302,
+        "filter" : "[2.5 TO 3}"
+      }, {
+        "label" : "3 - 3.5",
+        "population" : 7728,
+        "filter" : "[3 TO 3.5}"
+      }, {
+        "label" : "3.5 - 4",
+        "population" : 1716,
+        "filter" : "[3.5 TO 4}"
+      }, {
+        "label" : "4 - 4.5",
+        "population" : 450,
+        "filter" : "[4 TO 4.5}"
+      }, {
+        "label" : "4.5 - 5",
+        "population" : 120,
+        "filter" : "[4.5 TO 5}"
+      }, {
+        "label" : "> 4.5",
+        "population" : 275,
+        "filter" : "[4.5 TO *}"
+      } ]
+    } ]
+  } ]
+}
