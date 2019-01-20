@@ -37,10 +37,14 @@ See the demo html file in the examples folder for an example template.
 
 http://htmlpreview.github.io/?https://github.com/jshamble/TopChartJS/blob/master/examples/basic/index.html
 
+
+
 ## Features
 
 Customizable user parameters for enhanced user experience.
 There is an optional GUI to edit these parameters and update the JSON file on-the-fly.
+
+
 
 #### dom_node_name
 	This indicates the target html DOM node for the Chart to be attached to. Supply either the class name or id, it will search for both.
@@ -68,7 +72,10 @@ Indicates what chart you want to display. The following types are available:
 #### search regex / filter data -> 
 	Filter in / out which range of data to be rendered. [ inclusive_low, inclusive_high ( exclusive_low, exclusive_high )
 #### axis_labels : (labels for your chart) css props [position, rotation, scale, font_type, font_color]
-		
+#### Inheritance (parent-child)
+	Any Node can inherit from any parent above in the hierarchy, specified with the parent paramter.
+	All properties of the parent will be passed down to the child, but they can be overidden...
+
 ## Gallery
 
 Sampel Images of different chart types:

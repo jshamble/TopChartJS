@@ -122,6 +122,7 @@ function loadChartData(config_main,config_color)
 		let pieChartDataColumn = document.createElement('div');
 		pieChartDataColumn.id = "pChartDataColumn" + k;
 			
+			
 		let chart_select = document.createElement('select');
 		//1)<div class="boxContentContainer + 'i'"> </div>
 			
@@ -144,7 +145,20 @@ function loadChartData(config_main,config_color)
 			chartContainer.setAttribute("width",config_main["HTMLNodes"][k]["properties"]["width"]);
 			chartContainer.setAttribute("height",config_main["HTMLNodes"][k]["properties"]["height"]);
 			
+			//if has a specified width..., use it, etlse jsut use half of the width (default paramters)
+			if(config_main["HTMLNodes"][k]["properties"]["data-column-width"] != null)
+			{
+				pieChartDataColumn.style.width = config_main["HTMLNodes"][k]["properties"]["data-column-width"];
+				pieChartDataColumn.style.height = config_main["HTMLNodes"][k]["properties"]["data-column-height"];
+			}
+			else
+			{
+				let extract_width = config_main["HTMLNodes"][k]["properties"]["width"].replace( /^\D+/g, ''); // replace all leading non-digits with nothing
+				let extract_height = config_main["HTMLNodes"][k]["properties"]["height"].replace( /^\D+/g, ''); // replace all leading non-digits with nothing
 				
+				pieChartDataColumn.style.width = parseFloat(extract_width)*0.5 + "em";	
+				pieChartDataColumn.style.height = parseFloat(extract_height) + "em";
+			}
 			var URL_JSON = config_main["HTMLNodes"][k]["properties"]["data_url"];
 						 
 			var split_URL = URL_JSON.split('/');
@@ -194,7 +208,8 @@ function loadChartData(config_main,config_color)
 				
 			//(document.getElementsByClassName('chart_button_select'+i)[0]).empty();
 				
-			while (document.getElementById('chart_select'+k).firstChild) {
+			
+			while (document.getElementById('chart_select'+k) != null && document.getElementById('chart_select'+k).firstChild) {
 				document.getElementById('chart_select'+k).removeChild(document.getElementById('chart_select'+k).firstChild);
 			}
 				 
@@ -208,6 +223,7 @@ function loadChartData(config_main,config_color)
 			  var chart_type_options_text = document.createTextNode(chart_type[x]);
 			  chart_type_option.appendChild(chart_type_options_text);
 				  
+				 if(document.getElementById('chart_select'+k) != null )
 			  document.getElementById('chart_select'+k).appendChild(chart_type_option);
 				  
 			}
@@ -226,6 +242,7 @@ function loadChartData(config_main,config_color)
 							
 						setChartChange('chart_select'+k);
 						map_DATA_to_JSON[last_known_entry_name] = JSON.parse(data); 
+						
 						chartFactory(chart_name[k],map_DATA_to_JSON[last_known_entry_name],document.getElementById("chartContainer"+k),config_main["HTMLNodes"][k]["properties"] ,config_color[ config_main["HTMLNodes"][k]["properties"]["color_palette"] ],viewBox_props);
 							
 				})
@@ -264,6 +281,9 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 	 
     const margin = 120;
     const offset = 60;
+	
+	let centroid_x = 0;
+	let centroid_y = 0;
 	
 	const sample = [];
 		 
@@ -399,8 +419,7 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 
 	if(typeOfChart == 'bar vertical')
 	{ 
-		const chart = svg.append('g')
-		  .attr('transform', `translate(${offset}, ${offset})`);
+		const chart = svgContainer.append('g') .attr('transform', `translate(${offset}, ${offset})`);
 
 		const xScale = d3.scaleBand()
 		  .range([0, width])
@@ -451,7 +470,7 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 			  .attr('transform', 'scale('+config_main["font-scale"][0]+')')
 		  .on('mouseenter', function (actual, i) { 
 			
-			d3.selectAll('.value')
+			chart.selectAll('.value')
 			.filter(function (d, x) { return i === x;})
 			.attr("fill", (g) => ("#ED2939") )
 			.transition()             // apply a transition
@@ -478,7 +497,7 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 	 
 		  })
 		  .on('mouseleave', function () {
-			d3.selectAll('.value')
+			chart.selectAll('.value')
 			  .attr('opacity', 1) 
 			  .attr("fill", "#000000" )
 			  .transition()             // apply a transition
@@ -511,8 +530,8 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 	
 	}
 	else if(typeOfChart == 'bar horizontal')
-	{
-		const chart = svg.append('g').attr('transform', `translate(${offset}, ${offset})`);
+	{ 
+		const chart = svgContainer.append('g') .attr('transform', `translate(${offset}, ${offset})`);
 
 		//todo: two of them.
 		const xScale = d3.scaleBand()
@@ -583,7 +602,7 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 			
 			//select a specific one with the filter function:
 			//https://stackoverflow.com/questions/28390754/get-one-element-from-d3js-selection-by-index
-			d3.selectAll('.value')
+			chart.selectAll('.value')
 			.filter(function (d, x) { return i === x;})
 			.attr("fill", (g) => ("#ED2939") )
 			.transition()             // apply a transition
@@ -611,7 +630,7 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 
 		  })
 		  .on('mouseleave', function () {
-			d3.selectAll('.value')
+			chart.selectAll('.value')
 			  .attr('opacity', 1)
 			  .attr("fill", "#000000" )
 			  .transition()             // apply a transition
@@ -711,6 +730,9 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 					d.outerRadius = outer_radius;
 					let centroid = arc.centroid(d);
 					let radius_offset = config_main["radius-offset"][0];
+					centroid_x = centroid[0]*radius_offset;
+					centroid_y = centroid[1]*radius_offset;
+					
 			return "translate(" + centroid[0]*radius_offset + "," + centroid[1]*radius_offset + ")" + 'scale('+config_main["font-scale"][0]+')' ;}).attr("text-anchor", "middle").text( function(d, i) 
 			{
 				return sample[i].value;
@@ -748,7 +770,7 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 	
 	for(let z = 0; z < Object.keys(config_main["axis_labels"]).length; z++)
 	{
-		let axis_label = svg.append('text');
+		let axis_label = svgContainer.selectAll('g').selectAll('*').append('text');
 		
 		Object.keys(config_main["axis_labels"][z]).forEach(function(key)
 		{ 
@@ -756,11 +778,14 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 			{
 				if(key == 'x')
 				{
-					axis_label.attr(key, -(height / parseFloat(config_main["axis_labels"][z][key] ) - margin));
+					axis_label.attr(key, centroid_y - parseFloat(config_main["axis_labels"][z][key]));
+					//axis_label.attr(key, -(height / parseFloat(config_main["axis_labels"][z][key] ) - margin));
 				}
 				else if(key == 'y')
 				{
-					axis_label.attr(key, margin / parseFloat(config_main["axis_labels"][z][key] ));
+					
+					axis_label.attr(key, centroid_y - parseFloat(config_main["axis_labels"][z][key]));
+					//axis_label.attr(key, margin / parseFloat(config_main["axis_labels"][z][key] ));
 				}
 				else
 				{
@@ -846,8 +871,11 @@ function onChartChange(id)
 function setChartChange(id)
 {
 	//chart_select0 
-	document.getElementById(id).value = chart_name[id.slice(-1)];
-	localStorage.setItem(id, chart_name[id.slice(-1)]);
+	if(document.getElementById(id) != null)
+	{
+		document.getElementById(id).value = chart_name[id.slice(-1)];
+		localStorage.setItem(id, chart_name[id.slice(-1)]);
+	}
 }
 
 document.addEventListener('DOMContentLoaded', function(e)

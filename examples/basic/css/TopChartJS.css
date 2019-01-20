@@ -1,15 +1,59 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 @import url('https://fonts.googleapis.com/css?family=Monda');
+@import url('https://fonts.googleapis.com/css?family=Cinzel');
 
-html, body 
+html
 {
-  height:100%;
-  flex-direction: row;
-  display: flex;
-  flex-basis: 100%;
-  overflow-x: hidden;
-  overflow-y: hidden;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+	overflow-x: hidden;
+	overflow-y: hidden;
 }
+
+#TopChartJS
+{
+	font-family: 'Cinzel', sans-serif;
+	font-size: 8em;
+	text-align: center;
+	
+}
+
+a {
+  text-decoration: none;
+}
+
+
+.chrome {
+	margin: 0 auto;
+}
+
+.chrome {
+	background: #222 -webkit-gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff)) 0 0 no-repeat;
+	background-image: -webkit-linear-gradient(-40deg, transparent 0%, transparent 40%, #fff 50%, transparent 60%, transparent 100%);
+	-webkit-background-size: 200px;
+	color: rgba(0,0,0,0.3);
+	-webkit-animation-name: shine;
+	-webkit-background-clip: text;
+	-webkit-animation-duration: 8s;
+	-webkit-animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes shine {
+	0%, 10%{
+		background-position: -1000px;
+	}
+	20% {
+		background-position: -200px;
+	}
+	90% {
+		background-position: 800px;
+	}
+	100% {
+		background-position: 1000px;
+	}
+}
+
 
 body div[id^='gridContainer']
 {
