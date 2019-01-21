@@ -154,7 +154,6 @@ body select[id^='chart_select']
 	-webkit-transition: opacity 0.25s, background 0.25s ease;
 }
 
-
 .mouseHoverChart {
     background-color: black; 
     color: white; 
@@ -170,5 +169,4 @@ body select[id^='chart_select']
 	display: flex;
    justify-content: center;
    align-items: center;
-	
 }
