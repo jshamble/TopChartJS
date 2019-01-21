@@ -878,8 +878,8 @@ function setChartChange(id)
 	}
 }
 
-//document.addEventListener('DOMContentLoaded', function(e)
-window.onload = function () 
+document.addEventListener('DOMContentLoaded', function(e)
+//window.onload = function () 
 {
 	request({url: "./json/config_color.json"})
     .then(data_color => {
@@ -895,7 +895,7 @@ window.onload = function ()
     .catch(error => {
         console.log(error);
     });
-}//);
+});
 
 function loadPageContent()
 {
