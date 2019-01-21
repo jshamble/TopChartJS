@@ -542,6 +542,10 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		const yScale = d3.scaleLinear()
 		  .range([0,height])
 		  .domain([max_range,0]); 
+		  
+		const yScaleReverse = d3.scaleLinear()
+		  .range([0,height])
+		  .domain([0,max_range]); 
 
 		const makeYLines = () => d3.axisTop()
 		  .scale(yScale)
@@ -561,7 +565,7 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		chart.append('g')
 		  .attr('transform', `rotate(0)`)
 		  .attr('transform', `scale(` + config_main["font-scale"][0] + `)`)
-		  .call(d3.axisTop(yScale));
+		  .call(d3.axisTop(yScaleReverse));
 
 		chart.append('g')
 		  .attr('class', 'grid')

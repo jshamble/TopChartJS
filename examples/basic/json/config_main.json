@@ -5,7 +5,7 @@
 		"DOM_name": "wholeChartContainer0",
 		"properties":
 		{
-			"data_url": "./json/example_data.json",
+			"data_url": "http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/s_entry/resolution",
 			"color_palette": "modern",
 			"chart_type": "pie",
 			"viewBox": "0 0 500 500",
