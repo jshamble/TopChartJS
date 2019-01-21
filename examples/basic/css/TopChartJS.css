@@ -132,7 +132,6 @@ body p[id^='PieChart']
 	
 }
 
-/*css regex match*/
 body div[id^='pChartDataColumn']
 {
     overflow-y: auto;
