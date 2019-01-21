@@ -92,7 +92,7 @@ Sampel Images of different chart types:
 
 ![alt text](https://github.com/jshamble/TopChartJS/blob/master/examples/basic/img/Vertical%20Bar.png)
 
-### Example JSON File:
+### Example JSON File  (from http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/s_entry/resolution ) :
 
 {
   "q" : "*:*",
