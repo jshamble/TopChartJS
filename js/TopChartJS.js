@@ -282,9 +282,6 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
     const margin = 120;
     const offset = 60;
 	
-	let centroid_x = 0;
-	let centroid_y = 0;
-	
 	const sample = [];
 		 
 		 var groups = data['drilldowns'][0]['categories'][0]['groups'];
@@ -456,6 +453,7 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		  .data(sample)
 		  .enter()
 		  .append('g')
+			  .attr('transform', 'scale('+config_main["font-scale"][0]+')')
 
 		//decorator design pattern
 		  
@@ -467,7 +465,6 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		  .attr('height', (g) => height - yScale(g.value))
 		  .attr('width', xScale.bandwidth())
 		  .attr("fill", (g) => (g.color) )
-			  .attr('transform', 'scale('+config_main["font-scale"][0]+')')
 		  .on('mouseenter', function (actual, i) { 
 			
 			chart.selectAll('.value')
@@ -517,7 +514,7 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 			chart.selectAll('.divergence').remove()
 		  });
 
-		barGroups 
+		/*barGroups 
 		  .append('text')
 		  .attr('class', 'value')
 		  .attr('x', (a) => (xScale(a.label) + xScale.bandwidth() / 2))
@@ -525,6 +522,17 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		  .attr('text-anchor', 'middle')
 		  .text((a) => a.value)
 		  .attr('transform', 'scale('+config_main["font-scale"][0]+')');
+		  */
+		  
+		   barGroups 
+		  .append('text')
+		  .attr('class', 'value')
+		  .attr('x', (a) => (xScale(a.label) + xScale.bandwidth() / 2))
+		  .attr('y', (a) => yScale(a.value) - 10)
+		  .attr('text-anchor', 'middle')
+		  .text((a) => a.value)
+		  // .attr('transform', 'translate(${x_val}, ${y_val})')
+		  //.text((a) => `${a.value}%`)
 		
 		
 	
@@ -734,8 +742,6 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 					d.outerRadius = outer_radius;
 					let centroid = arc.centroid(d);
 					let radius_offset = config_main["radius-offset"][0];
-					centroid_x = centroid[0]*radius_offset;
-					centroid_y = centroid[1]*radius_offset;
 					
 			return "translate(" + centroid[0]*radius_offset + "," + centroid[1]*radius_offset + ")" + 'scale('+config_main["font-scale"][0]+')' ;}).attr("text-anchor", "middle").text( function(d, i) 
 			{
@@ -772,9 +778,21 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 	
 	//loop here to append the axes labels and their proprties
 	
-	for(let z = 0; z < Object.keys(config_main["axis_labels"]).length; z++)
+	let centroid = 0;
+	
+	for(let z = 0; z < config_main["axis_labels"].length; z++)
 	{
 		let axis_label = svgContainer.selectAll('g').selectAll('*').append('text');
+		
+		
+		if( (config_main["axis_labels"][z]['pie-label'] != null && typeOfChart == "pie") || (config_main["axis_labels"][z]['pie-label'] == null && typeOfChart != "pie") )
+		{
+			centroid = 0;
+		}
+		else
+		{
+			centroid = 1000;
+		}
 		
 		Object.keys(config_main["axis_labels"][z]).forEach(function(key)
 		{ 
@@ -782,16 +800,16 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 			{
 				if(key == 'x')
 				{
-					axis_label.attr(key, centroid_y - parseFloat(config_main["axis_labels"][z][key]));
+					axis_label.attr(key, centroid + parseFloat(config_main["axis_labels"][z][key]));
 					//axis_label.attr(key, -(height / parseFloat(config_main["axis_labels"][z][key] ) - margin));
 				}
 				else if(key == 'y')
 				{
 					
-					axis_label.attr(key, centroid_y - parseFloat(config_main["axis_labels"][z][key]));
+					axis_label.attr(key, centroid - parseFloat(config_main["axis_labels"][z][key]));
 					//axis_label.attr(key, margin / parseFloat(config_main["axis_labels"][z][key] ));
 				}
-				else
+				else if (key != "pie-label")
 				{
 					axis_label.attr(key,config_main["axis_labels"][z][key]);
 				}
@@ -806,32 +824,8 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		//axis_label.attr('text-anchor', 'middle');
 		
 		axis_label.text( config_main["axis_labels"][z]['text'] );
-		z++;
 	}
 		
-		/*svg
-		  .append('text')
-		  .attr('class', 'label')
-		  .attr('x', -(height / 2) - margin)
-		  .attr('y', margin / 2.4)
-		  .attr('transform', 'rotate(-90)')
-		  .attr('text-anchor', 'middle')
-		  .text('(%)')
-
-		svg.append('text')
-		  .attr('class', 'label')
-		  .attr('x', width / 2 + margin)
-		  .attr('y', height + margin * 1.7)
-		  .attr('text-anchor', 'middle')
-		  .text(data['drilldowns'][0]['categories'][0]["field_name"] + ' data')
-		  
-		svg.append('text')
-		  .attr('class', 'source')
-		  .attr('x', width - margin / 2)
-		  .attr('y', height + margin * 1.7)
-		  .attr('text-anchor', 'start')
-		  .text('Source: RSCB PDB Archive, 2018')*/
-		  
 		
 	
 	}

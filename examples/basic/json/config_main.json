@@ -15,16 +15,27 @@
 			"data-column-height": "20em",
 			"filter":"*",
 			"radius-offset":[1.6],
-			"font-scale":[1.1,1.1],
+			"font-scale":[1.5,1.5],
 			"css":[{"font-family":"Roboto","font-color":"#FFFFFF"}],
 			"axis_labels":
 			[
 				{
-				 "text":"TopChartJS",
+				 "text":"TopChartJS Pie",
 				 "class":"label",
 				 "transform":"rotate(0)",
 				 "x":"0",
 				 "y":"0",
+				 "text-anchor":"middle", 
+				 "font-family":"Roboto",
+				 "font-color":"#0000AA",
+				 "pie-label":"true"
+				},
+				{
+				 "text":"TopChartJS",
+				 "class":"label",
+				 "transform":"rotate(0)",
+				 "x":"150",
+				 "y":"-290",
 				 "text-anchor":"middle", 
 				 "font-family":"Roboto",
 				 "font-color":"#0000AA"
