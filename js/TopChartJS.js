@@ -817,6 +817,8 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 				else if (key != "pie-label")
 				{
 					axis_label.attr(key,config_main["axis_labels"][z][key]);
+					
+					
 				}
 			}
 		});
@@ -831,8 +833,14 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		
 		axis_label.text( config_main["axis_labels"][z]['text'] );
 		//"translate(" + centroid[0]*radius_offset + "," + centroid[1]*radius_offset + ")" + 'scale('+config_main["font-scale"][0]+')'
-		axis_label.attr('transform', "translate(" + (centroid + config_main["axis_labels"][z]['x']) + "," + ( centroid - config_main["axis_labels"][z]['y'] ) + ")" + 'scale('+factor+')');
-		//axis_label.attr('transform', 'translate(' + centroid + "," + centroid ')' + 'scale('+factor+')');
+		
+		
+			axis_label.attr("transform", function(d)
+			{
+				return "translate(" + (centroid + config_main["axis_labels"][z]['x']) + "," + ( centroid - config_main["axis_labels"][z]['y'] ) + ")" + 'scale('+factor+')' + this.getAttribute("transform") 
+			});
+		
+		//axis_label.attr('transform', "translate(" + (centroid + config_main["axis_labels"][z]['x']) + "," + ( centroid - config_main["axis_labels"][z]['y'] ) + ")" + 'scale('+factor+')');
 		
 	}
 		
