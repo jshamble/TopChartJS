@@ -783,16 +783,22 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 	for(let z = 0; z < config_main["axis_labels"].length; z++)
 	{
 		let axis_label = svgContainer.selectAll('g').selectAll('*').append('text');
-		
+		let factor = 1.0;
 		
 		if( (config_main["axis_labels"][z]['pie-label'] != null && typeOfChart == "pie") || (config_main["axis_labels"][z]['pie-label'] == null && typeOfChart != "pie") )
 		{
 			centroid = 0;
+			
+			if((config_main["axis_labels"][z]['pie-label'] == null && typeOfChart != "pie"))
+			{
+				factor = 1.0/config_main["font-scale"][0];
+			}
 		}
 		else
 		{
 			centroid = 1000;
 		}
+		
 		
 		Object.keys(config_main["axis_labels"][z]).forEach(function(key)
 		{ 
@@ -800,13 +806,12 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 			{
 				if(key == 'x')
 				{
-					axis_label.attr(key, centroid + parseFloat(config_main["axis_labels"][z][key]));
+					//axis_label.attr(key, );
 					//axis_label.attr(key, -(height / parseFloat(config_main["axis_labels"][z][key] ) - margin));
 				}
 				else if(key == 'y')
 				{
-					
-					axis_label.attr(key, centroid - parseFloat(config_main["axis_labels"][z][key]));
+					//axis_label.attr(key, centroid - parseFloat(config_main["axis_labels"][z][key]));
 					//axis_label.attr(key, margin / parseFloat(config_main["axis_labels"][z][key] ));
 				}
 				else if (key != "pie-label")
@@ -823,7 +828,12 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		//axis_label.attr('transform', 'rotate(-90)');
 		//axis_label.attr('text-anchor', 'middle');
 		
+		
 		axis_label.text( config_main["axis_labels"][z]['text'] );
+		//"translate(" + centroid[0]*radius_offset + "," + centroid[1]*radius_offset + ")" + 'scale('+config_main["font-scale"][0]+')'
+		axis_label.attr('transform', "translate(" + (centroid + config_main["axis_labels"][z]['x']) + "," + ( centroid - config_main["axis_labels"][z]['y'] ) + ")" + 'scale('+factor+')');
+		//axis_label.attr('transform', 'translate(' + centroid + "," + centroid ')' + 'scale('+factor+')');
+		
 	}
 		
 		

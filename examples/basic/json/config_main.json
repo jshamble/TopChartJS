@@ -24,7 +24,7 @@
 				 "class":"label",
 				 "transform":"rotate(0)",
 				 "x":"0",
-				 "y":"0",
+				 "y":"235",
 				 "text-anchor":"middle", 
 				 "font-family":"Roboto",
 				 "font-color":"#0000AA",
@@ -34,9 +34,9 @@
 				 "text":"TopChartJS",
 				 "class":"label",
 				 "transform":"rotate(0)",
-				 "x":"150",
+				 "x":"130",
 				 "y":"-290",
-				 "text-anchor":"middle", 
+				 "text-anchor":"middle",
 				 "font-family":"Roboto",
 				 "font-color":"#0000AA"
 				}
