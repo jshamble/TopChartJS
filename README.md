@@ -82,15 +82,15 @@ Sampel Images of different chart types:
 
 ### Pie
 
-![alt text](https://github.com/jshamble/TopChartJS/blob/master/examples/basic/img/Pie.png)
+![alt text](https://github.com/jshamble/TopChartJS/blob/master/examples/img/Pie.png)
 
 ### Bar (Horizontal)
 
-![alt text](https://github.com/jshamble/TopChartJS/blob/master/examples/basic/img/Horizontal%20Bar.png)
+![alt text](https://github.com/jshamble/TopChartJS/blob/master/examples/img/Horizontal%20Bar.png)
 
 ### Bar (Vertical)
 
-![alt text](https://github.com/jshamble/TopChartJS/blob/master/examples/basic/img/Vertical%20Bar.png)
+![alt text](https://github.com/jshamble/TopChartJS/blob/master/examples/img/Vertical%20Bar.png)
 
 ### Example JSON File  (from http://search-phase2-staging.rcsb.org/rcsbsearch/v1/statistics/s_entry/resolution ) :
 
