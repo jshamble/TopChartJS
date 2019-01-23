@@ -33,7 +33,7 @@
 				{
 				 "text":"TopChartJS Horiz",
 				 "class":"label",
-				 "transform":"rotate(-90)scale(1.5)",
+				 "transform":"rotate(-90)scale(1.3)",
 				 "x":"-50",
 				 "y":"-130",
 				 "text-anchor":"middle",
@@ -44,7 +44,7 @@
 				{
 				 "text":"TopChartJS Vert",
 				 "class":"label",
-				 "transform":"scale(1.5)",
+				 "transform":"scale(1.3)",
 				 "x":"130",
 				 "y":"-290",
 				 "text-anchor":"middle",

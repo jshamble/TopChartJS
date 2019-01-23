@@ -577,17 +577,17 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		  
 
 		chart.append('g')
-		  .attr('transform', `rotate(0)`)
-		  .attr('transform', `scale(` + config_main["font-scale"][0] + `)`)
-		  .call(d3.axisTop(yScaleReverse));
+		  .call(d3.axisTop(yScaleReverse))
+		  .attr('transform', `scale(` + config_main["font-scale"][0] + `)`);
 
 		chart.append('g')
 		  .attr('class', 'grid')
-		  .call(makeYLines()
+		  .call(
+		     makeYLines()
 			.tickSize(-width, 0, 0)
 			.tickFormat('')
-		  )
-		  .attr('transform', `scale(` + config_main["font-scale"][0] + `)`)
+			)
+			.attr('transform', `scale(` + config_main["font-scale"][0] + `)`)
 		  
 		  const x_val = (a) => height-yScale(a.value) + 305;
 		  const y_val = (a) => xScale(a.label) + xScale.bandwidth() / 2 + 5;
