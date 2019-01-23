@@ -794,14 +794,14 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		let axis_label = svgContainer.selectAll('g').selectAll('*').append('text');
 		let factor = 1.0;
 		
-		if( (config_main["axis_labels"][z]['pie-label'] != null && typeOfChart == "pie") || (config_main["axis_labels"][z]['pie-label'] == null && typeOfChart != "pie") )
+		if((config_main["axis_labels"][z]['pie-label'] == null && typeOfChart != "pie"))
+		{
+				factor = 1.0/config_main["font-scale"][0];
+		}
+			
+		if( typeOfChart == config_main["axis_labels"][z]['chart-label-type'] )
 		{
 			centroid = 0;
-			
-			if((config_main["axis_labels"][z]['pie-label'] == null && typeOfChart != "pie"))
-			{
-				factor = 1.0/config_main["font-scale"][0];
-			}
 		}
 		else
 		{
@@ -846,7 +846,8 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 		
 			axis_label.attr("transform", function(d)
 			{
-				return "translate(" + (centroid + config_main["axis_labels"][z]['x']) + "," + ( centroid - config_main["axis_labels"][z]['y'] ) + ")" + 'scale('+factor+')' + this.getAttribute("transform") 
+					//Have to specify if it is a label for horizontal bar, vertical bar, pie , etc. in config file.
+					return "translate(" + (centroid + parseFloat(config_main["axis_labels"][z]['x'])) + "," + ( centroid - parseFloat(config_main["axis_labels"][z]['y'])) + ")" + 'scale('+factor+')' + this.getAttribute("transform") 
 			});
 		
 		//axis_label.attr('transform', "translate(" + (centroid + config_main["axis_labels"][z]['x']) + "," + ( centroid - config_main["axis_labels"][z]['y'] ) + ")" + 'scale('+factor+')');

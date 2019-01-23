@@ -28,17 +28,29 @@
 				 "text-anchor":"middle", 
 				 "font-family":"Roboto",
 				 "font-color":"#0000AA",
-				 "pie-label":"true"
+				 "chart-label-type":"pie"
 				},
 				{
-				 "text":"TopChartJS",
+				 "text":"TopChartJS Horiz",
+				 "class":"label",
+				 "transform":"rotate(-90)scale(1.5)",
+				 "x":"-50",
+				 "y":"-130",
+				 "text-anchor":"middle",
+				 "font-family":"Roboto",
+				 "font-color":"#0000AA",
+				 "chart-label-type":"bar horizontal"
+				},
+				{
+				 "text":"TopChartJS Vert",
 				 "class":"label",
 				 "transform":"scale(1.5)",
 				 "x":"130",
 				 "y":"-290",
 				 "text-anchor":"middle",
 				 "font-family":"Roboto",
-				 "font-color":"#0000AA"
+				 "font-color":"#0000AA",
+				 "chart-label-type":"bar vertical"
 				}
 			]
 		}
