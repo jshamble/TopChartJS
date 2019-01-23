@@ -384,21 +384,27 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 				 data_object_small_group.color = colors[getRandIntRange(0,colors.length-1)];
 				 
 				 //data_object.color = colors[i % colors.length -1];
+				 
+				 //small group showing nubmer is disabled  
 			}
+			
+			
 			 
-		 }
-		 
+		 } 
 		 
 		 
 		 //alert(data_object_small_group.label);
 		 
 		 if(Object.keys(data_object_small_group).length !== 0)
 		 {
+			 
+				 data_object_small_group.label += " (" + data_object_small_group.value + ")";
+			 
 				 var pieChartDataCol = document.createElement("p");
 				 pieChartDataCol.id = "PieChart" + DOMElement.id.slice(-1);
 				 pieChartDataCol.style.opacity = "100";
 				 pieChartDataCol.style["background-color"] = data_object_small_group.color;
-				 pieChartDataCol.innerHTML = data_object_small_group.label + " " + "(" + data_object_small_group.value + ")";
+				 pieChartDataCol.innerHTML = data_object_small_group.label;// + " " + "(" + data_object_small_group.value + ")";
 				 
 				 //since the chart is a pie, add to the DOM element the piechart DATA: pieChartData
 				 document.getElementById("pChartDataColumn" + DOMElement.id.slice(-1)).append(pieChartDataCol);
@@ -745,6 +751,9 @@ function chartFactory(typeOfChart,data,DOMElement,config_main,colors,viewBox_pro
 					
 			return "translate(" + centroid[0]*radius_offset + "," + centroid[1]*radius_offset + ")" + 'scale('+config_main["font-scale"][0]+')' ;}).attr("text-anchor", "middle").text( function(d, i) 
 			{
+					//User Experience: Make the Last child only visible on mouse highlight.
+				if(i == sample.length-1)
+					return "";
 				return sample[i].value;
 			}
 				).on("mouseover", function(d, i) {
