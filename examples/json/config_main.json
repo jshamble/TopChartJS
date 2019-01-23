@@ -9,7 +9,7 @@
 			"color_palette": "modern",
 			"chart_type": "pie",
 			"viewBox": "0 0 500 500",
-			"width": "50em",
+			"width": "25em",
 			"height": "20em",
 			"data-column-width": "20em",
 			"data-column-height": "20em",
