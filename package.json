@@ -1,58 +1,49 @@
 {
-  "name": "topchartjs",
+  "name": "TopChart",
   "version": "1.0.0",
-  "description": "An extension of d3 for dynamic editable charting.",
-  "main": "./lib/index.js",
+  "description": "Charting Library",
+  "main": "main.js",
   "scripts": {
-    "clean": "rimraf lib",
-    "test": "npm run lint",
-    "test:prod": "cross-env BABEL_ENV=production npm run test",
-    "test:only": "mocha --require babel-core/register --require babel-polyfill --recursive",
-    "test:watch": "npm test -- --watch",
-    "test:examples": "node examples/",
-    "lint": "eslint src test",
-    "build": "cross-env BABEL_ENV=production babel src --out-dir lib",
-    "prepublish": "npm run clean && npm run lint && npm run test && npm run build"
+    "start": "webpack-dev-server --config=config/webpack.dev.js",
+    "start-prod": "webpack-dev-server --config=config/webpack.prod.js",
+    "build": "webpack --config=config/webpack.dev.js",
+    "build-prod": "webpack --config=config/webpack.prod.js",
+    "build-stats": "webpack --env production --json > stats.json",
+    "dev": " NODE_ENV=\"development\" nodemon --inspect --watch config --watch src/server src/server/main.js",
+    "prod": " NODE_ENV=\"production\" nodemon --inspect --watch config --watch src/server src/server/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "files": [
-    "lib",
-    "src"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jshamble/TopChartJS.git"
-  },
-  "keywords": [
-    "chart",
-    "d3",
-    "pie"
-  ],
-  "author": "Jonathan Shamblen <jshamble.js@gmail.com>",
-  "license": "AGPL-3.0",
-  "bugs": {
-    "url": "https://github.com/jshamble/TopChartJS"
-  },
-  "homepage": "https://github.com/jshamble/TopChartJS",
-  "devDependencies": {
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/runtime": "^7.3.1",
     "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.6",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-minify": "^0.3.0",
-    "chai": "^4.1.2",
-    "cross-env": "^5.2.0",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.12.3",
-    "mocha": "^5.2.0",
-    "rimraf": "^2.6.2"
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
+    "css-loader": "^2.1.0",
+    "d3": "^5.9.1",
+    "html-webpack-plugin": "^3.2.0",
+    "json-loader": "^0.5.7",
+    "style-loader": "^0.23.1"
   },
-  "directories": {
-    "example": "examples",
-    "test": "test"
-  },
-  "dependencies": {}
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-es2015": "^7.0.0-beta.53",
+    "babel-core": "^6.26.3",
+    "dotenv": "^6.2.0",
+    "dotenv-webpack": "^1.7.0",
+    "file-loader": "^3.0.1",
+    "html-loader": "^0.5.5",
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.1.14",
+    "webpack-hot-middleware": "^2.24.3",
+    "webpack-obfuscator": "^0.18.0"
+  }
 }

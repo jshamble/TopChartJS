@@ -17,7 +17,7 @@ Provides customizable user configurations for enhanced usability in terms of use
 
 ## Live Demo
  
-http://htmlpreview.github.io/?https://github.com/jshamble/TopChartJS/blob/master/examples/basic/index.html
+http://htmlpreview.github.io/?https://github.com/jshamble/TopChartJS/blob/master/examples/index.html
 
 ## Usage
 
@@ -34,10 +34,6 @@ The config_main.json file will be populated with a sample subset of all of the f
 The complete list of features per chart and their function will be listed in the features below.
 
 See the demo html file in the examples folder for an example template.
-
-http://htmlpreview.github.io/?https://github.com/jshamble/TopChartJS/blob/master/examples/basic/index.html
-
-
 
 ## Features
 
