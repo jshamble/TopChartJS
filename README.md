@@ -15,10 +15,6 @@ Provides customizable user configurations for enhanced usability in terms of use
 [devDependencies-badge]: https://img.shields.io/david/dev/mrdoob/three.js.svg
 [devDependencies-badge-url]: https://david-dm.org/mrdoob/three.js#info=devDependencies
 
-## Live Demo
- 
-http://htmlpreview.github.io/?https://github.com/jshamble/TopChartJS/blob/master/examples/index.html
-
 ## Usage
 
 ### Includes (See examples/basic to retrieve files)
