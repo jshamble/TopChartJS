@@ -3,18 +3,6 @@
 General Charting Library for plotting statistical data.
 Provides customizable user configurations for enhanced usability in terms of user interaction and user experience.
 
-[![License][license-badge]][license-badge-url] 
- 
-[license-badge]: https://img.shields.io/aur/license/yaourt.svg
-[devDependencies-badge]: https://img.shields.io/david/dev/mrdoob/three.js.svg
-[license-badge-url]: ./LICENSE
-[![Dependencies][dependencies-badge]][dependencies-badge-url]
-
-[dependencies-badge]: https://img.shields.io/david/mrdoob/three.js.svg
-[dependencies-badge-url]: https://david-dm.org/mrdoob/three.js
-[devDependencies-badge]: https://img.shields.io/david/dev/mrdoob/three.js.svg
-[devDependencies-badge-url]: https://david-dm.org/mrdoob/three.js#info=devDependencies
-
 ## Usage
 
 ### Includes (See examples/basic to retrieve files)
